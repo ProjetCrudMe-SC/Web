@@ -27,5 +27,23 @@ $achats = [
 ];
 var_dump($achats);
 
-// 1.	Afficher la liste de course de chaque acheteur dans des balises ul>li
-//2.	Afficher le chiffre d’affaire final
+$prixTotal = 0;
+
+echo "<ul>";
+    foreach ($achats as $heure => $detail) {
+        $prixTotal += $detail["Prix"];
+        echo "<li>Voici le panier de {$detail["Prenom"]}";
+            echo"<ul>";
+            foreach ($detail["Panier"]["Fruits"] as $type => $produit){
+                echo "$produit, ";
+            }
+            echo "<br/>";
+        foreach ($detail["Panier"]["Legumes"] as $type => $produit){
+            echo "$produit, ";
+        }
+            echo"</ul>";
+        echo"</li>";
+    }
+
+echo "</ul>";
+echo "<p>LE chiffre d'affaire est de $prixTotal €</p>";
