@@ -15,3 +15,28 @@ Pour convertir en degrés Celsius une température donnée en degrés Fahrenheit
 Ensuite adapter la fonction pour qu’elle puisse convertir un degré (Fahrenheit, Celsius) en un autre (Fahrenheit, Celsius). Attention vous devez mettre en place vos talents de programmeur pour créer une fonction dont la signature (paramètres d’entrés et type de sortie) ne puisse plus bouger dans le temps. De telle sorte que plus tard on puisse ajouter les « Kelvin » dans le système
 
  */
+enum TypeDegre{
+    case C;
+    case F;
+}
+function convert(float $value, TypeDegre $from,TypeDegre $to) : float{
+    if($from == TypeDegre::C && $to == TypeDegre::F){
+        $result = 4465.256;
+    }
+    if($from == TypeDegre::F && $to == TypeDegre::C){
+        $result = 0.22;
+    }
+
+    return $result;
+}
+
+
+
+
+
+
+
+
+
+
+
