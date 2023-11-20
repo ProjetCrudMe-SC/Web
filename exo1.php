@@ -20,4 +20,27 @@ echo "<ul>";
     echo "<li>{$fruitsLegumes[5]}</li>";
 echo "</ul>";
 
+for($i=0;$i <= count($fruitsLegumes);$i++){
+    if(isset($fruitsLegumes[$i])){
+        echo "<p>Voici le contenu de l'index {$i} : {$fruitsLegumes[$i]}</p>";
+    }
+}
+
+foreach ($fruitsLegumes as $key => $item){
+    echo "<p>J'ai acheté {$item} située à l'index {$key}</p>";
+}
+
+$arrayFruits = [
+    "F" => "Fraise",
+    "A" => "Abricot",
+    "P" => "Pomme",
+];
+echo "<p>{$arrayFruits["F"]}</p>";
+foreach ($arrayFruits as $key => $value){
+    echo "<p>L'index {$key} propose {$value}</p>";
+}
+
+
+
+
 
