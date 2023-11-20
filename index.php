@@ -1,31 +1,13 @@
-<?php
- $a = false;
-$b = 12;
-$c = 12.5;
-$chaine = "Ceci est un String";
- var_dump($chaine);
- echo $chaine;
- // Comment
-/*
- * plusieurs
- * ligne de
- * commentaire
- */
+<?php require ("./inc/config.php"); ?>
+<?php require ("./inc/header.php"); ?>
+<h1>Bienvenue sur notre Blog</h1>
+<p>
+    <?php
+        $phrase = "Bonjour nous allons pourquoi il est intéressant de programmer en Flutter pour les applications mobiles X-Platform";
+        $extrait = premiersMots($phrase,10);
+        echo $extrait;
+    ?>
+    <a href="#">Lire la suite ...</a>
+</p>
 
-$var = "Ma phrase";
-echo "$var <br/>";
-echo '$var <br/>';
-echo "la valeur de var = {$var}";
-
-$prenom1 = "Emmanuel";
-$prenom2 = "Sylvie";
-
-echo "<p>Bonjour {$prenom1}, pense à appeler {$prenom2}</p>";
-
-// Déclaration Tableau
-$arrayHomme = array("Brice", "Benoit", "Romain", "Clément");
-$arrayFemme = ["Marion", "Sylvie", "Laurianne", "Kelly"];
-
-$arrayHomme[] = "Xavier";
-var_dump($arrayHomme);
-echo "$arrayHomme[1] a été embauché";
+<?php require ("./inc/footer.php"); ?>
