@@ -1,4 +1,8 @@
 <?php
+require ("../inc/security.php");
+if(!have_good_role(["redacteur", "relecteur"])){
+    header("Location: /login.php");
+}
 require('../inc/header.php');
 require ('../inc/config.php');
 $requete = $bdd->query('SELECT * FROM articles ');
