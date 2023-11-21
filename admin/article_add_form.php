@@ -1,6 +1,6 @@
 <?php require ("../inc/config.php"); ?>
 <?php require ("../inc/header.php"); ?>
-<h1>Ajouter u article - Partie Admin</h1>
+<h1>Ajouter un article - Partie Admin</h1>
 <form action="article_show.php" method="post">
     <input type="text" name="titre">
     <textarea name="description"></textarea>
