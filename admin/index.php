@@ -23,7 +23,7 @@ $articles = $requete->fetchALL(PDO::FETCH_ASSOC);
     foreach($articles as $article)
     {
         echo "<tr>";
-        echo "<th scope='row'><a href='#'>{$article["Id"]}</a></th>";
+        echo "<th scope='row'><a href='/admin/article_edit_form.php?articleId={$article["Id"]}'>{$article["Id"]}</a></th>";
         echo "<td>{$article["Titre"]}</td>";
         echo "<td>{$article["DatePublication"]}</td>";
         echo "<td>{$article["Auteur"]}</td>";

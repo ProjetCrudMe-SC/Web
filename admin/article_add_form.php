@@ -6,11 +6,10 @@
     <textarea name="description"></textarea>
     <input type="date" name="datepublication">
     <select name="auteur">
-        <option value="Samuel">Samuel</option>
-        <option value="Killian">Killian</option>
-        <option value="Noé">Noé</option>
-        <option value="Dylan">Dylan</option>
-        <option value="Thomas B">Thomas B</option>
+        <option value="Fabien">Fabien</option>
+        <option value="Brice">Brice</option>
+        <option value="Bruno">Bruno</option>
+        <option value="Benoit">Benoit</option>
     </select>
     <input type="submit">
 </form>

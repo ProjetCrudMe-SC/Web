@@ -3,7 +3,7 @@ require('../inc/config.php');
 //Clear All TAble
 $requete = $bdd->prepare('TRUNCATE TABLE articles');
 $requete->execute();
-$arrayAuteur = array('Fabien', 'Brice', 'Bruno', 'Jean-Pierre', 'Benoit', 'Emmanuel', 'Sylvie', 'Marion');
+$arrayAuteur = array('Fabien', 'Brice', 'Bruno', 'Benoit');
 $arrayTitre = array('PHP en force', 'React JS une valeur montante', 'C# toujours au top', 'Java en légère baisse'
 , 'Les entreprises qui recrutent', 'Les formations à ne pas rater', 'Les langages populaires en 2020', 'L\'année du Javascript');
 $dateajout = new DateTime();
