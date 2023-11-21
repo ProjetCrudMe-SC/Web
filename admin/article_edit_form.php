@@ -9,7 +9,7 @@
 <?php require ("../inc/header.php"); ?>
 <h1>Modifier un article - Partie Admin</h1>
 <form action="article_edit_script.php" method="post">
-    <input type="hidden" value="<?php echo $article["Id"]?>">
+    <input type="hidden" name="articleId" value="<?php echo $article["Id"]?>">
     <input type="text" name="titre" value="<?php echo $article["Titre"] ?>">
     <textarea name="description">
         <?php echo $article["Description"] ?>
