@@ -27,7 +27,7 @@ $articles = $requete->fetchALL(PDO::FETCH_ASSOC);
         echo "<td>{$article["Titre"]}</td>";
         echo "<td>{$article["DatePublication"]}</td>";
         echo "<td>{$article["Auteur"]}</td>";
-        echo "<td><a href='#'>&#128465;</a></td>";
+        echo "<td><a href='/admin/article_delete_script.php?Id={$article["Id"]}'>&#128465;</a></td>";
         echo "</tr>";
     }
     ?>
