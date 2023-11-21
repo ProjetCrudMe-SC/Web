@@ -9,5 +9,5 @@ $execute = $requete->execute([
     "DatePublication" => "2023-11-11",
     "Auteur" => "Fabien",
 ]);
-
+// Tester en allant sur www.cesi.local/admin/article_add_script.php
 var_dump($execute);
