@@ -4,26 +4,20 @@
 var_dump($_GET);
 ?>
 <h1>Bienvenue sur notre Blog</h1>
-<p>
-    <?php
-        $phrase = "Bonjour nous allons pourquoi il est intéressant de programmer en Flutter pour les applications mobiles X-Platform";
-        $extrait = premiersMots($phrase,10);
-        echo $extrait;
-    ?>
-    <a href="#">Lire la suite ...</a>
-</p>
-
 <?php
-$prenomsNote = [
-    "Brice" => "C",
-    "Julie" => "B",
-    "Aegir" => "D",
-    "Emilie" => "A"
-];
-foreach ($prenomsNote as $eleve => $note) {
-    // Faire le lien a.href vers eleve.php
-    echo "<p><a href='eleve.php?eleve=$eleve&note=$note'>Voir la note de $eleve</a></p>";
-}
+$variableduchampinvisible = "123";
+var_dump($_POST);
 ?>
+<form name="recherche" method="post">
+    <input placeholder="ID Sql" name="search" type="text">
+    <input type="hidden" name="champInvisible" value="<?php echo $variableduchampinvisible; ?>">
+</form>
+
+<form name="recherche" method="post" action="submitform.php">
+    <input type="text" name="prenom">
+    <input type="text" name="nom">
+    <input type="date" name="date">
+    <input type="submit">
+</form>
 
 <?php require ("./inc/footer.php"); ?>

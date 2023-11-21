@@ -1,5 +1,5 @@
 <?php
-
+var_dump($_GET);
 if(isset($_GET["eleve"]) && isset($_GET["note"])){
     echo "bonjour {$_GET["eleve"]} ta note est {$_GET["note"]}";
 }else{
