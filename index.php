@@ -1,7 +1,11 @@
 <?php require ("./inc/config.php"); ?>
 <?php
 if(isset($_POST["search"])){
-    $requete = $bdd->query("SELECT * FROM articles WHERE Id={$_POST["search"]}");
+    $requete = $bdd->prepare("SELECT * FROM articles WHERE Id = :IDARTICLE OR Titre like :TITREARTICLE");
+    $requete->execute([
+            "IDARTICLE" => $_POST["search"],
+            "TITREARTICLE" => "%".$_POST["search"]."%"
+    ]);
     $articles = $requete->fetch(PDO::FETCH_ASSOC);
 }else{
     $requete = $bdd->query("SELECT * FROM articles");
