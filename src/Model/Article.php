@@ -96,8 +96,9 @@ class Article {
         return \strlen($this->Titre) + 1;
     }
 
-    public function SqlAdd(\PDO $bdd) :array{
+    public function SqlAdd() :array{
         try{
+            $bdd = BDD::getInstance();
             $requete = $bdd->prepare("INSERT INTO articles (Titre, Description, DatePublication, Auteur, ImageRepository, ImageFileName) VALUES(:Titre, :Description, :DatePublication, :Auteur, :ImageRepository, :ImageFileName)");
 
             $execute = $requete->execute([
@@ -114,4 +115,31 @@ class Article {
         }
 
     }
+
+
+    /**
+     * @param \PDO $bdd
+     * @param int $nb
+     * @return array<int,Article>
+     */
+    public static function SqlGetLast(int $nb) : array {
+        $bdd = BDD::getInstance();
+        $requete = $bdd->prepare('SELECT * FROM articles ORDER BY Id DESC LIMIT :nb');
+        $requete->bindValue('nb', $nb, \PDO::PARAM_INT);
+        $requete->execute();
+        $articlesSQL = $requete->fetchAll(\PDO::FETCH_ASSOC);
+        $articlesObjet=[];
+        foreach ($articlesSQL as $articleSQL){
+            $article = new Article();
+            $date = new \DateTime($articleSQL["DatePublication"]);
+            $article->setTitre($articleSQL["Titre"])
+                ->setId($articleSQL["Id"])
+                ->setDescription($articleSQL["Description"])
+                ->setDatePublication($date)
+                ->setAuteur($articleSQL["Auteur"]);
+            $articlesObjet[] = $article;
+        }
+        return $articlesObjet;
+    }
+
 }

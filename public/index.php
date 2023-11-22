@@ -15,6 +15,11 @@ function chargerClasse($classe){
 }
 spl_autoload_register("chargerClasse");
 
-$article = new \src\Model\Article();
-$article->setTitre("Coucou")->setDescription("Coucou");
-var_dump($article);
+
+
+
+$controller = new src\Controller\ArticleController();
+echo $controller->index();
+
+
+
