@@ -1,4 +1,5 @@
 <?php
+require_once "../vendor/autoload.php";
 function chargerClasse($classe){
     //$classe va ressembler à src\Model\Article
     $ds = DIRECTORY_SEPARATOR;
