@@ -28,8 +28,8 @@ if($controller != ''){
             $controller = new $class();
             if (method_exists($class, $action)) {
                 echo $controller->$action($param);
-            }else { echo'Acion n\'existe pas pour cette action !';}
-        }else { echo 'Le controlleur n\'existe pas pour cette action !';}
+            }else { echo'Acion n\'existe pas pour ce controller !';}
+        }else { echo 'Le controlleur n\'existe pas pour cette url !';}
     }
     catch(Exception $e) {
         // Penser à Gérer l’exception
