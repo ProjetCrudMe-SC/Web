@@ -2,7 +2,7 @@
 /* Database Connexion */
 const _DBHOSTNAME_ = "cours_php-mariadb106";
 const _DBUSERNAME_ = "docker";
-const _DBPASSWORD_ = "cesi";
+const _DBPASSWORD_ = "docker";
 const _DBNAME_ = "docker";
 const _DBPORT_ = 3306;
 

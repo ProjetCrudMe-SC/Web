@@ -1,6 +1,6 @@
 <?php
 require ("../inc/security.php");
-if(!have_good_role(["redacteur", "relecteur"])){
+if(!have_good_role(["admin", "redacteur", "relecteur"])){
     header("Location: /login.php");
 }
 require('../inc/header.php');
