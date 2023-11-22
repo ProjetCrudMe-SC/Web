@@ -18,4 +18,11 @@ class ArticleController extends AbstractController {
         return "<p>Fixtures ok </p>";
     }
 
+    public function all(){
+        //Todo retourner tous les articles !
+        // Modifier le Modèle
+        // Créer la vue
+        // Controller récupère les données, les trasnmets à la vue
+        // url = ?controller=Article&action=all
+    }
 }
