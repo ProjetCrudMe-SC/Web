@@ -23,4 +23,16 @@
     </select>
     <input type="submit">
 </form>
+
+<?php
+
+$filePath = $article["ImageRepository"]."/".$article["ImageFileName"];
+
+if($article["ImageRepository"] != "" AND file_exists("../uploads/images/{$filePath}")){
+    $absolutePath = "/uploads/images/{$filePath}";
+    echo "<img src='$absolutePath'/>";
+}
+?>
+
+
 <?php require ("../inc/footer.php"); ?>
