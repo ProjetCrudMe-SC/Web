@@ -15,7 +15,11 @@ class ContactController extends AbstractController {
             from: $_POST["mail"],
             to: "admin@votresite.com",
             subject: "Contact depuis le formulaire principal",
-            bodyHtml: "<h1>Bonjour vous avez reçu un mail</h1>"
+            bodyHtml: $this->getTwig()->render("Mail/contact.html.twig",[
+                "nom" => $_POST["nom"],
+                "email" => $_POST["mail"],
+                "message" => $_POST["message"]
+            ])
         );
         header("location:/Contact/form");
     }
