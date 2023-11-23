@@ -1,24 +1,8 @@
+{% extends "base.html.twig" %}
+{% block title %} Accueil - {{ parent() }}{% endblock %}
+{% block body %}
 <h1>Accueil</h1>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Titre</th>
-        <th scope="col">Date de Publication</th>
-        <th scope="col">Qui a écrit ?</th>
-        <th scope="col">Delete</th>
-    </tr>
-    </thead>
-    <tbody>
-        {% for article in articles %}
-            <tr>
-                <td>{{ article.Id }}</td>
-                <td>{{ article.Titre }}</td>
-                <td>{{ article.DatePublication|date("d/m/Y") }}</td>
-                <td>{{ article.Auteur }}</td>
-                <td>Remove</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    {% include "Article/_article_table.html.twig"  with articles %}
+
+{%  endblock %}

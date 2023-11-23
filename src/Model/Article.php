@@ -173,7 +173,7 @@ class Article {
             shuffle($arrayAuteur);
             shuffle($arrayTitre);
 
-            $dateajout->modify('+'.$i.' day');
+            $dateajout->modify('+1 day');
             $article = new Article();
             $article
                 ->setTitre($arrayTitre[0])
