@@ -35,6 +35,7 @@ class ArticleController extends AbstractController {
             $sqlRepository = null;
             $nomImage = null;
 
+
             if(!empty($_FILES["Image"]["name"])){
                 $tabExt = ["jpg", "jpeg", "gif", "png"]; // Extension autorisée
                 $extension = pathinfo($_FILES["Image"]["name"], PATHINFO_EXTENSION);
@@ -48,7 +49,9 @@ class ArticleController extends AbstractController {
                     $sqlRepository = $dateNow->format("Y/m");
                     //Renommer le fichier image à la volée
                     $nomImage = md5(uniqid()).".".$extension;
-
+                    var_dump($repository);
+                    var_dump($nomImage);
+                    die();
                     //Upload du fichier
                     move_uploaded_file($_FILES["Image"]["tmp_name"], $repository."/".$nomImage);
                 }
