@@ -1,3 +1,6 @@
+index.php?url=Admin/Add
+
+
 Quand on clique sur le titre d’un article (pas sur l’ID qui servira à modifier l’article) afficher le détail d’un article dans la route « ?controller=Article&action=show&param=ID »
 
 	Pour afficher l’image actuelle vous devrez tester si cette dernière existe. Il n’existe pas de fonction Twig permettant de tester l’existence d’un fichier. Mais comme Twig s’appuie sur php (du moins génère du php) alors vous allez devoir créer votre propre fonction file_exist en php et faire en sorte qu’elle soit utilisable pour Twig. Pour cela dans le constructeur du AbstractController.php, juste après la direcvive « DebugExtension » que nous avons déjà écrit, ajoutez :

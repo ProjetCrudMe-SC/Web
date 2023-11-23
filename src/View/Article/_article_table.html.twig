@@ -11,11 +11,11 @@
     <tbody>
     {% for article in articles %}
         <tr>
-            <td><a href="/?controller=Article&action=update&param={{ article.id }}">{{ article.Id }}</a></td>
-            <td><a href="/?controller=Article&action=show&param={{ article.id }}">{{ article.Titre }}</a></td>
+            <td><a href="/Article/update/{{ article.id }}">{{ article.Id }}</a></td>
+            <td><a href="/Article/show/{{ article.id }}">{{ article.Titre }}</a></td>
             <td>{{ article.DatePublication|date("d/m/Y") }}</td>
             <td>{{ article.Auteur }}</td>
-            <td><a href="/?controller=Article&action=delete&param={{ article.id }}">X-Delete-X</a></td>
+            <td><a href="/Article/delete/{{ article.id }}">X-Delete-X</a></td>
         </tr>
     {% endfor %}
     </tbody>

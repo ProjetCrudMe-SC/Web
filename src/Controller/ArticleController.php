@@ -27,7 +27,7 @@ class ArticleController extends AbstractController {
 
     public function delete(int $id){
         Article::SqlDelete($id);
-        header("Location: /?controller=Article&action=all");
+        header("Location: /Article/all");
     }
 
     public function add(){
@@ -67,7 +67,7 @@ class ArticleController extends AbstractController {
             $result = $article->SqlAdd();
 
 
-            header("Location: /?controller=Article&action=all");
+            header("Location: /Article/all");
         }
         return $this->getTwig()->render("Article/add.html.twig");
     }
@@ -75,7 +75,7 @@ class ArticleController extends AbstractController {
     public function show(int $id){
         $article = Article::SqlGetById($id);
         if($article==null){
-            header("Location: /?controller=Article&action=all");
+            header("Location: /Article/all");
         }
         return $this->getTwig()->render("Article/show.html.twig", [
             "article" => $article
@@ -131,7 +131,7 @@ class ArticleController extends AbstractController {
                     }
                 }
 
-                header("Location:/?controller=Article&action=update&param={$id}");
+                header("Location:/Article/update/{$id}");
             }else{
                 return $this->getTwig()->render('Article/update.html.twig',[
                     "article"=>$article
@@ -139,7 +139,7 @@ class ArticleController extends AbstractController {
             }
 
         }else{
-            header("Location:/?controller=Article&action=all");
+            header("Location:/Article/all");
 
         }
     }
