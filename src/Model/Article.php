@@ -113,7 +113,7 @@ class Article implements \JsonSerializable
                 "ImageRepository" => $this->getImageRepository(),
                 "ImageFileName" => $this->getImageFileName(),
             ]);
-            return [0, "Insertion OK"];
+            return [0, "Insertion OK", $bdd->lastInsertId()];
         } catch (\Exception $e) {
             return [1, $e->getMessage()];
         }

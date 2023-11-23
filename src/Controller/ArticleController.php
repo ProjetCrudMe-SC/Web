@@ -2,6 +2,7 @@
 namespace src\Controller;
 
 use src\Model\Article;
+use src\Service\MailService;
 
 class ArticleController extends AbstractController {
 
@@ -66,6 +67,17 @@ class ArticleController extends AbstractController {
                 ->setImageFileName($nomImage);
             $result = $article->SqlAdd();
 
+            //Envoi du mail
+            $article->setId($result[2]);
+            $mail = new MailService();
+            $mail->send(
+                from: "admin@votresite.com",
+                to: "admin@votresite.com",
+                subject: "Un nouvel article a été posté",
+                bodyHtml: $this->getTwig()->render("Mail/article.add.html.twig",[
+                    "article" => $article
+                ])
+            );
 
             header("Location: /Article/all");
         }
