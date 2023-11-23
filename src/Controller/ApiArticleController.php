@@ -39,6 +39,33 @@ class ApiArticleController{
         $result = $article->SqlAdd();
         return json_encode($result);
     }
+
+    public function addBis(){
+        if($_SERVER["REQUEST_METHOD"] != "POST"){
+            header("HTTP/1.1 404 Not Found");
+            return json_encode("Erreur de méthode (POST attendu)");
+        }
+
+        // Takes raw data from the request
+        $json = file_get_contents('php://input');
+        // Converts it into a PHP object
+        $data = json_decode($json);
+
+        if(!isset($data->Titre) || !isset($data->Description)){
+            header("HTTP/1.1 404 Not Found");
+            return json_encode("Erreur il manque des données)");
+        }
+
+
+
+        $article = new Article();
+        $article->setTitre($data->Titre)
+            ->setDescription($data->Description)
+            ->setDatePublication(new \DateTime($data->DatePublication))
+            ->setAuteur($data->Auteur);
+        $result = $article->SqlAdd();
+        return json_encode($result);
+    }
 }
 
 
