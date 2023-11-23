@@ -1,7 +1,15 @@
-Faire la méthode qui permet de supprimer un article (depuis la liste des articles)
-(Faire un lien A HREF depuis le texte "remove")
-?controller=Article&action=delete&
+Quand on clique sur le titre d’un article (pas sur l’ID qui servira à modifier l’article) afficher le détail d’un article dans la route « ?controller=Article&action=show&param=ID »
 
-N’oubliez pas que dans votre URL vous avez « le droit » à un paramètre  (regardez /public/index.php pour comprendre).
+	Pour afficher l’image actuelle vous devrez tester si cette dernière existe. Il n’existe pas de fonction Twig permettant de tester l’existence d’un fichier. Mais comme Twig s’appuie sur php (du moins génère du php) alors vous allez devoir créer votre propre fonction file_exist en php et faire en sorte qu’elle soit utilisable pour Twig. Pour cela dans le constructeur du AbstractController.php, juste après la direcvive « DebugExtension » que nous avons déjà écrit, ajoutez :
+        $fileExist = new \Twig\TwigFunction('file_exist', function($fullfilename){
+            return file_exists($fullfilename);
+        });
+        $this->twig->addFunction($fileExist);
+Voilà vous avez appris à ajouter une fonction à Twig, pour l’utiliser dans le template Twig voici ce qu’il faudra écrire :
+        {% if file_exist( './uploads/images/'~article.ImageRepository~'/'~article.ImageFileName ) and article.ImageFileName !="" %}
 
-Après suppression de l’article il faut retourner sur la page « Article ALL » (reprendre la meme logique dans la version classic de notre site)
+                <img src="/uploads/images/{{ article.ImageRepository }}/{{ article.ImageFileName }}" class="img-thumbnail"/>
+            </div>
+
+        {% endif %}
+
