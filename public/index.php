@@ -19,7 +19,6 @@ function chargerClasse($classe){
 spl_autoload_register("chargerClasse");
 
 
-
 $controller = (isset($_GET['controller'])) ? $_GET['controller'] : '';
 $action = (isset($_GET['action'])) ? $_GET['action'] : '';
 $param = (isset($_GET['param'])) ? $_GET['param'] : '';
