@@ -1,13 +1,14 @@
 <?php
 namespace src\Model;
-class Article {
+class Article
+{
     private ?int $Id = null;
-    private ?String $Titre = null;
-    private ?String $Description = null;
-    private ?String $Auteur = null;
+    private ?string $Titre = null;
+    private ?string $Description = null;
+    private ?string $Auteur = null;
     private ?\DateTime $DatePublication = null;
-    private ?String $ImageRepository = null;
-    private ?String $ImageFileName = null;
+    private ?string $ImageRepository = null;
+    private ?string $ImageFileName = null;
 
     public function getId(): ?int
     {
@@ -86,18 +87,21 @@ class Article {
         return $this;
     }
 
-    public function premiersMots(int $n) : String {
+    public function premiersMots(int $n): string
+    {
         preg_match('/^(\S+\s+){0,' . ($n - 1) . '}\S+/', $this->Description, $matches);
         $resultat = $matches[0];
         return $resultat;
     }
 
-    public function strlen(){
+    public function strlen()
+    {
         return \strlen($this->Titre) + 1;
     }
 
-    public function SqlAdd() :array{
-        try{
+    public function SqlAdd(): array
+    {
+        try {
             $bdd = BDD::getInstance();
             $requete = $bdd->prepare("INSERT INTO articles (Titre, Description, DatePublication, Auteur, ImageRepository, ImageFileName) VALUES(:Titre, :Description, :DatePublication, :Auteur, :ImageRepository, :ImageFileName)");
 
@@ -110,7 +114,7 @@ class Article {
                 "ImageFileName" => $this->getImageFileName(),
             ]);
             return [0, "Insertion OK"];
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return [1, $e->getMessage()];
         }
 
@@ -122,14 +126,15 @@ class Article {
      * @param int $nb
      * @return array<int,Article>
      */
-    public static function SqlGetLast(int $nb) : array {
+    public static function SqlGetLast(int $nb): array
+    {
         $bdd = BDD::getInstance();
         $requete = $bdd->prepare('SELECT * FROM articles ORDER BY Id DESC LIMIT :nb');
         $requete->bindValue('nb', $nb, \PDO::PARAM_INT);
         $requete->execute();
         $articlesSQL = $requete->fetchAll(\PDO::FETCH_ASSOC);
-        $articlesObjet=[];
-        foreach ($articlesSQL as $articleSQL){
+        $articlesObjet = [];
+        foreach ($articlesSQL as $articleSQL) {
             $article = new Article();
             $date = new \DateTime($articleSQL["DatePublication"]);
             $article->setTitre($articleSQL["Titre"])
@@ -142,13 +147,14 @@ class Article {
         return $articlesObjet;
     }
 
-    public static function SqlGetAll(){
+    public static function SqlGetAll()
+    {
         $bdd = BDD::getInstance();
         $requete = $bdd->prepare('SELECT * FROM articles ORDER BY Id DESC');
         $requete->execute();
         $articlesSQL = $requete->fetchAll(\PDO::FETCH_ASSOC);
-        $articlesObjet=[];
-        foreach ($articlesSQL as $articleSQL){
+        $articlesObjet = [];
+        foreach ($articlesSQL as $articleSQL) {
             $article = new Article();
             $date = new \DateTime($articleSQL["DatePublication"]);
             $article->setTitre($articleSQL["Titre"])
@@ -161,7 +167,8 @@ class Article {
         return $articlesObjet;
     }
 
-    public static function SqlFixtures() {
+    public static function SqlFixtures()
+    {
         $bdd = BDD::getInstance();
         $requete = $bdd->prepare('TRUNCATE TABLE articles');
         $requete->execute();
@@ -169,7 +176,7 @@ class Article {
         $arrayTitre = array('PHP en force', 'React JS une valeur montante', 'C# toujours au top', 'Java en légère baisse'
         , 'Les entreprises qui recrutent', 'Les formations à ne pas rater', 'Les langages populaires en 2020', 'L\'année du Javascript');
         $dateajout = new \DateTime();
-        for($i = 1;$i <=200; $i++){
+        for ($i = 1; $i <= 200; $i++) {
             shuffle($arrayAuteur);
             shuffle($arrayTitre);
 
@@ -185,24 +192,27 @@ class Article {
         }
     }
 
-    public static function SqlDelete(int $id){
+    public static function SqlDelete(int $id)
+    {
         $bdd = BDD::getInstance();
         $req = $bdd->prepare("DELETE FROM articles WHERE Id=:Id");
         $req->execute([
-            "Id"=>$id
+            "Id" => $id
         ]);
     }
 
-    public static function SqlGetById(int $id) : ?Article{
+    public static function SqlGetById(int $id): ?Article
+    {
         $bdd = BDD::getInstance();
         $req = $bdd->prepare("SELECT * FROM articles WHERE Id=:Id");
         $req->execute([
-            "Id"=>$id
+            "Id" => $id
         ]);
         $articleSql = $req->fetch(\PDO::FETCH_ASSOC);
-        if($articleSql != false){
+        if ($articleSql != false) {
             $article = new Article();
             $article->setTitre($articleSql["Titre"])
+                ->setId($id)
                 ->setDescription(($articleSql["Description"]))
                 ->setDatePublication(new \DateTime($articleSql["DatePublication"]))
                 ->setAuteur($articleSql["Auteur"])
@@ -213,4 +223,25 @@ class Article {
         return null;
     }
 
+    public function SqlUpdate()
+    {
+        $bdd = BDD::getInstance();
+        try {
+            $requete = $bdd->prepare('UPDATE articles SET Titre=:Titre, Description=:Description, DatePublication=:DatePublication, Auteur=:Auteur, ImageRepository=:ImageRepository, ImageFileName=:ImageFileName WHERE Id=:Id');
+            $result = $requete->execute([
+                'Titre' => $this->getTitre()
+                , 'Description' => $this->getDescription()
+                , 'DatePublication' => $this->getDatePublication()->format("Y-m-d")
+                , 'Auteur' => $this->getAuteur()
+                , 'ImageRepository' => $this->getImageRepository()
+                , 'ImageFileName' => $this->getImageFileName()
+                , 'Id' => $this->getId()
+            ]);
+            return array(0, "[OK] Mise à jour");
+        } catch (\Exception $e) {
+            return array(1, "[ERREUR] " . $e->getMessage());
+
+        }
+
+    }
 }
