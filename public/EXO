@@ -1,18 +1,5 @@
-index.php?url=Admin/Add
+Désormais quand on ajoute un article, on souhaite avertir l’administrateur du site par mail, ce mail contiendra les infos de l’article ajouté ainsi qu’ un lien qui emmène vers la page de modification du mail (/Article/update/id).
 
+Vous utiliserez le template mail suivant : https://github.com/leemunroe/responsive-html-email-template
 
-Quand on clique sur le titre d’un article (pas sur l’ID qui servira à modifier l’article) afficher le détail d’un article dans la route « ?controller=Article&action=show&param=ID »
-
-	Pour afficher l’image actuelle vous devrez tester si cette dernière existe. Il n’existe pas de fonction Twig permettant de tester l’existence d’un fichier. Mais comme Twig s’appuie sur php (du moins génère du php) alors vous allez devoir créer votre propre fonction file_exist en php et faire en sorte qu’elle soit utilisable pour Twig. Pour cela dans le constructeur du AbstractController.php, juste après la direcvive « DebugExtension » que nous avons déjà écrit, ajoutez :
-        $fileExist = new \Twig\TwigFunction('file_exist', function($fullfilename){
-            return file_exists($fullfilename);
-        });
-        $this->twig->addFunction($fileExist);
-Voilà vous avez appris à ajouter une fonction à Twig, pour l’utiliser dans le template Twig voici ce qu’il faudra écrire :
-        {% if file_exist( './uploads/images/'~article.ImageRepository~'/'~article.ImageFileName ) and article.ImageFileName !="" %}
-
-                <img src="/uploads/images/{{ article.ImageRepository }}/{{ article.ImageFileName }}" class="img-thumbnail"/>
-            </div>
-
-        {% endif %}
-
+Pour connaitre le dernier ID ajouté, consulter https://www.php.net/manual/en/pdo.lastinsertid.php
