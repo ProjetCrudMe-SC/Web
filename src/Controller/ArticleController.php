@@ -19,10 +19,9 @@ class ArticleController extends AbstractController {
     }
 
     public function all(){
-        //Todo retourner tous les articles !
-        // Modifier le Modèle
-        // Créer la vue
-        // Controller récupère les données, les trasnmets à la vue
-        // url = ?controller=Article&action=all
+        $articles = Article::SqlGetAll();
+        return $this->twig->render('Article/all.html.twig',[
+            "articles" => $articles
+        ]);
     }
 }
