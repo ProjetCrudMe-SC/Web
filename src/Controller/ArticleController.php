@@ -7,7 +7,7 @@ class ArticleController extends AbstractController {
 
     public  function index(){
         $articles = Article::SqlGetLast(20);
-        return $this->twig->render('Article/index.html.twig',[
+        return $this->getTwig()->render('Article/index.html.twig',[
             "articles" => $articles
         ]);
     }
@@ -20,7 +20,7 @@ class ArticleController extends AbstractController {
 
     public function all(){
         $articles = Article::SqlGetAll();
-        return $this->twig->render('Article/all.html.twig',[
+        return $this->getTwig()->render('Article/all.html.twig',[
             "articles" => $articles
         ]);
     }
