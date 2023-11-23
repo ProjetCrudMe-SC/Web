@@ -15,7 +15,7 @@
             <td>{{ article.Titre }}</td>
             <td>{{ article.DatePublication|date("d/m/Y") }}</td>
             <td>{{ article.Auteur }}</td>
-            <td>Remove</td>
+            <td><a href="/?controller=Article&action=delete&param={{ article.id }}">X-Delete-X</a></td>
         </tr>
     {% endfor %}
     </tbody>

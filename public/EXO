@@ -1,0 +1,7 @@
+Faire la méthode qui permet de supprimer un article (depuis la liste des articles)
+(Faire un lien A HREF depuis le texte "remove")
+?controller=Article&action=delete&
+
+N’oubliez pas que dans votre URL vous avez « le droit » à un paramètre  (regardez /public/index.php pour comprendre).
+
+Après suppression de l’article il faut retourner sur la page « Article ALL » (reprendre la meme logique dans la version classic de notre site)

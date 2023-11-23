@@ -24,4 +24,9 @@ class ArticleController extends AbstractController {
             "articles" => $articles
         ]);
     }
+
+    public function delete(int $id){
+        Article::SqlDelete($id);
+        header("Location: /?controller=Article&action=all");
+    }
 }

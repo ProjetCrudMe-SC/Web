@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require_once "../vendor/autoload.php";
 function chargerClasse($classe){
     //$classe va ressembler à src\Model\Article
@@ -34,6 +36,7 @@ if($controller != ''){
     }
     catch(Exception $e) {
         // Penser à Gérer l’exception
+        echo $e->getMessage();
     }
 }else {
     //Route par défaut (/)
