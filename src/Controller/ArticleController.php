@@ -72,6 +72,16 @@ class ArticleController extends AbstractController {
         return $this->getTwig()->render("Article/add.html.twig");
     }
 
+    public function show(int $id){
+        $article = Article::SqlGetById($id);
+        if($article==null){
+            header("Location: /?controller=Article&action=all");
+        }
+        return $this->getTwig()->render("Article/show.html.twig", [
+            "article" => $article
+        ]);
+    }
+
 
 
 

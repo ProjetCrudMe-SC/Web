@@ -11,6 +11,10 @@ class AbstractController
             "debug" => true
         ]);
         $twig->addExtension(new \Twig\Extension\DebugExtension());
+        $fileExist = new \Twig\TwigFunction('file_exist', function($fullfilename){
+            return file_exists($fullfilename);
+        });
+        $twig->addFunction($fileExist);
         return $twig;
     }
 }
