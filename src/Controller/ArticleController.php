@@ -32,6 +32,7 @@ class ArticleController extends AbstractController {
     }
 
     public function add(){
+        UserController::protect(["Redacteur", "Administrateur", "Editeur"]);
         if(isset($_POST["Titre"]) && isset($_POST["Description"])){
             $sqlRepository = null;
             $nomImage = null;

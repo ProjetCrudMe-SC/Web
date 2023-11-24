@@ -45,4 +45,25 @@ class UserController extends AbstractController {
 
     }
 
+    public static function protect(array $rolescompatibles){
+        session_start();
+        if(!isset($_SESSION["login"]) || !isset($_SESSION["login"]["roles"] )){
+            throw new \Exception("Vous devez vous authentifier pour acceder à cette page");
+        }
+
+        //Comparaison Role par Role
+        $rolefound = false;
+        foreach($_SESSION["login"]["roles"] as $role){
+            if(in_array($role,$rolescompatibles )){
+                $rolefound = true;
+                break;
+            }
+        }
+        if(!$rolefound){
+            throw new \Exception("Vous n'avez pas les droits d'accéder à cette page");
+        }
+
+    }
+
+
 }
