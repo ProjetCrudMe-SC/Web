@@ -63,5 +63,11 @@ class UserController extends AbstractController {
 
     }
 
+    public function logout(){
+        if(isset($_SESSION["login"])){
+            unset($_SESSION["login"]);
+        }
+        header("location:/");
+    }
 
 }
