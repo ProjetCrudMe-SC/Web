@@ -2,6 +2,7 @@
 namespace src\Service;
 
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class JwtService{
     public static String $secretKey = "cesiblog";
