@@ -63,6 +63,22 @@ class User {
         return $this;
     }
 
+    public static function SqlAdd(User $user) :array{
+        $bdd = BDD::getInstance();
+        try{
+            $req = $bdd->prepare("INSERT INTO users (NomPrenom, Email, Password, Roles) VALUES(:NomPrenom, :Email, :Password, :Roles)");
+            $req->execute([
+                "NomPrenom" => $user->getNomPrenom(),
+                "Email" => $user->getEmail(),
+                "Password" => $user->getPassword(),
+                "Roles" => $user->getRoles(),
+            ]);
+
+            return [0,"Insertion OK", $bdd->lastInsertId()];
+        }catch (\Exception $e){
+            return [1,"ERROR => {$e->getMessage()}"];
+        }
+    }
 
 
 }
