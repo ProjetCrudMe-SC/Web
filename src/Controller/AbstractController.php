@@ -15,6 +15,7 @@ class AbstractController
             return file_exists($fullfilename);
         });
         $twig->addFunction($fileExist);
+        $twig->addGlobal('session', $_SESSION);
         return $twig;
     }
 }

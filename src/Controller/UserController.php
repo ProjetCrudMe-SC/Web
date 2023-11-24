@@ -26,7 +26,6 @@ class UserController extends AbstractController {
             if($user!=null){
                 //Comparaison des mots de passe
                 if (password_verify($_POST["password"], $user->getPassword())) {
-                    session_start();
                     $_SESSION["login"] = [
                         "mail" => $user->getMail(),
                         "nomprenom" => $user->getNomPrenom(),
@@ -46,7 +45,6 @@ class UserController extends AbstractController {
     }
 
     public static function protect(array $rolescompatibles){
-        session_start();
         if(!isset($_SESSION["login"]) || !isset($_SESSION["login"]["roles"] )){
             throw new \Exception("Vous devez vous authentifier pour acceder à cette page");
         }
