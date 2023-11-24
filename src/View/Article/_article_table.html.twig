@@ -15,7 +15,13 @@
             <td><a href="/Article/show/{{ article.id }}">{{ article.Titre }}</a></td>
             <td>{{ article.DatePublication|date("d/m/Y") }}</td>
             <td>{{ article.Auteur }}</td>
-            <td><a href="/Article/delete/{{ article.id }}">X-Delete-X</a></td>
+            <td>
+                <form method="post" action="/Article/delete">
+                    <input type="hidden" name="id" value="{{ article.id }}">
+                    <input type="hidden" name="tokenCSRF" value="{{ tokenCSRF }}">
+                    <button type="submit" class="btn btn-danger"> Supprimer</button>
+                </form>
+            </td>
         </tr>
     {% endfor %}
     </tbody>

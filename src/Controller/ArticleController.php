@@ -22,14 +22,22 @@ class ArticleController extends AbstractController {
     }
 
     public function all(){
+        $token = md5(random_bytes(32));
+        $_SESSION["token"] = $token;
         $articles = Article::SqlGetAll();
         return $this->getTwig()->render('Article/all.html.twig',[
-            "articles" => $articles
+            "articles" => $articles,
+            "tokenCSRF" => $token
         ]);
     }
 
-    public function delete(int $id){
-        Article::SqlDelete($id);
+    public function delete(){
+        UserController::protect(["Redacteur", "Administrateur", "Editeur"]);
+        if(isset($_POST["id"])){
+            if($_SESSION["token"] == $_POST["tokenCSRF"]){
+                Article::SqlDelete($_POST["id"]);
+            }
+        }
         header("Location: /Article/all");
     }
 
