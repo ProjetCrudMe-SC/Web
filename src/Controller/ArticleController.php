@@ -2,6 +2,7 @@
 namespace src\Controller;
 
 use Mpdf\Mpdf;
+use Mpdf\Output\Destination;
 use src\Model\Article;
 use src\Service\MailService;
 
@@ -161,12 +162,12 @@ class ArticleController extends AbstractController {
     public function pdf(int $id){
         $article = Article::SqlGetById($id);
         $mpdf = new Mpdf([
-            "tempDir" => $_SERVER["DOCUMENT_ROOT"]."../var/cache/pdf"
+            "tempDir" => $_SERVER["DOCUMENT_ROOT"]."/../var/cache/pdf"
         ]);
         $mpdf->WriteHTML($this->getTwig()->render("Article/pdf.html.twig", [
             "article" => $article
         ]));
-        $mpdf->Output();
+        $mpdf->Output(name: "Article.pdf",dest: Destination::DOWNLOAD);
     }
 
 
