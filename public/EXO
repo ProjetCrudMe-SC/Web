@@ -1,5 +1,4 @@
-Désormais quand on ajoute un article, on souhaite avertir l’administrateur du site par mail, ce mail contiendra les infos de l’article ajouté ainsi qu’ un lien qui emmène vers la page de modification du mail (/Article/update/id).
-
-Vous utiliserez le template mail suivant : https://github.com/leemunroe/responsive-html-email-template
-
-Pour connaitre le dernier ID ajouté, consulter https://www.php.net/manual/en/pdo.lastinsertid.php
+-	/Article/All = Rédacteur, Vérificateur ou Administrateur
+-	Add = Redacteur ou Administrateur
+-	Update = Verificateur ou Admin
+-	Delete = Admin seulement
