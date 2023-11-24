@@ -69,9 +69,9 @@ class User {
             $req = $bdd->prepare("INSERT INTO users (NomPrenom, Email, Password, Roles) VALUES(:NomPrenom, :Email, :Password, :Roles)");
             $req->execute([
                 "NomPrenom" => $user->getNomPrenom(),
-                "Email" => $user->getEmail(),
+                "Email" => $user->getMail(),
                 "Password" => $user->getPassword(),
-                "Roles" => $user->getRoles(),
+                "Roles" => json_encode($user->getRoles()),
             ]);
 
             return [0,"Insertion OK", $bdd->lastInsertId()];
