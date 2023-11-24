@@ -160,7 +160,9 @@ class ArticleController extends AbstractController {
 
     public function pdf(int $id){
         $article = Article::SqlGetById($id);
-        $mpdf = new Mpdf();
+        $mpdf = new Mpdf([
+            "tempDir" => $_SERVER["DOCUMENT_ROOT"]."../var/cache/pdf"
+        ]);
         $mpdf->WriteHTML($this->getTwig()->render("Article/pdf.html.twig", [
             "article" => $article
         ]));
