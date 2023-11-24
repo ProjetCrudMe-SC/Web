@@ -1,6 +1,7 @@
 <?php
 namespace src\Controller;
 
+use Mpdf\Mpdf;
 use src\Model\Article;
 use src\Service\MailService;
 
@@ -157,7 +158,14 @@ class ArticleController extends AbstractController {
         }
     }
 
-
+    public function pdf(int $id){
+        $article = Article::SqlGetById($id);
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML($this->getTwig()->render("Article/pdf.html.twig", [
+            "article" => $article
+        ]));
+        $mpdf->Output();
+    }
 
 
 }
