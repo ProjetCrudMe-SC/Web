@@ -2,6 +2,7 @@
 namespace src\Controller;
 
 use src\Model\User;
+use src\Service\JwtService;
 
 class UserController extends AbstractController {
 
@@ -68,6 +69,35 @@ class UserController extends AbstractController {
             unset($_SESSION["login"]);
         }
         header("location:/");
+    }
+
+    public function loginJwt(){
+        header('Content-Type: application/json; charset=utf-8');
+
+        if($_SERVER["REQUEST_METHOD"] != "POST"){
+            header("HTTP/1.1 404 Not Found");
+            return json_encode("Erreur de méthode (POST attendu)");
+        }
+
+        if(!isset($_POST["mail"]) || !isset($_POST["password"])){
+            header("HTTP/1.1 404 Not Found");
+            return json_encode("Erreur il manque des données)");
+        }
+
+        $user = User::SqlGetByMail($_POST["mail"]);
+        if($user==null){
+            return json_encode("Erreur user inconu");
+        }
+
+        if (!password_verify($_POST["password"], $user->getPassword())) {
+            return json_encode("Erreur User / Password");
+        }
+
+        echo JwtService::createToken([
+           "mail" => $user->getMail(),
+           "roles" => $user->getRoles(),
+           "nomprenom" => $user->getNomPrenom()
+        ]);
     }
 
 }
