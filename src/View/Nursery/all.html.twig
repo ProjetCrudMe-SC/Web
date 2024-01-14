@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+{% block title %} ADMIN - {{ parent() }} - Liste des crèches{% endblock %}
+{% block body %}
+<h1>Toutes les crèches</h1>
+   {{ dump(session) }}
+   {{ dump(tokenCSRF) }}
+    {% include "Nursery/_article_table.html.twig" with Nurseries %}
+
+{%  endblock %}

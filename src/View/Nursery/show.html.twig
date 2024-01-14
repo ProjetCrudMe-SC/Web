@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+{% block title %} Crèche {{ Nursery.NameNursery }} - {{ parent() }}{% endblock %}
+{% block body %}
+    <h1>{{ Nursery.NameNursery }}</h1>
+    <p><strong>Description :</strong>{{ Nursery.Description }}</p>
+    <p><strong>Ville :</strong>{{ Nursery.Ville }}</p>
+    <p><strong>Date :</strong>{{ Nursery.date|date("d/m/Y") }}</p>
+    <p>
+        {% if file_exist( './uploads/images/'~Nursery.ImageRepository~'/'~Nursery.ImageFileName ) and Nursery.ImageFileName !="" %}
+            <img src="/uploads/images/{{ Nursery.ImageRepository }}/{{ Nursery.ImageFileName }}" class="img-thumbnail"/>
+        {% endif %}
+    </p>
+    <p>
+        <a href="/Nursery/pdf/{{ Nursery.id }}" class="btn btn-primary">Exporter en PDF</a>
+    </p>
+{% endblock %}
