@@ -4,10 +4,10 @@ use PDO;
 
 class BDD{
     private static $_instance = null;
-private const _DBHOSTNAME_ = "146.59.230.135";
-private const _DBUSERNAME_ = "docker";
-    private  const _DBPASSWORD_ = "Dc4*chRB64*o";
-    private const _DBNAME_ = "docker";
+private const _DBHOSTNAME_ = "";
+private const _DBUSERNAME_ = "";
+    private  const _DBPASSWORD_ = "";
+    private const _DBNAME_ = "";
 private const _DBPORT_ = 3310;
 
     private function __construct() {}
