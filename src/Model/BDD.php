@@ -8,7 +8,7 @@ private const _DBHOSTNAME_ = "";
 private const _DBUSERNAME_ = "";
     private  const _DBPASSWORD_ = "";
     private const _DBNAME_ = "";
-private const _DBPORT_ = 3310;
+private const _DBPORT_ = ;
 
     private function __construct() {}
     private function __clone() {}
