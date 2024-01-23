@@ -6,16 +6,16 @@ use JsonSerializable;
 
 class Coordinates implements JsonSerializable
 {
-    private ?int $Id = null;
+    private ?string $Id = null;
     private ?float $Latitude = null;
     private ?float $Longitude = null;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->Id;
     }
 
-    public function setId(?int $Id): Coordinates
+    public function setId(?string $Id): Coordinates
     {
         $this->Id = $Id;
         return $this;

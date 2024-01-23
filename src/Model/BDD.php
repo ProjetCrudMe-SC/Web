@@ -7,7 +7,7 @@ use PDO;
 class BDD
 {
     private static $_instance = null;
-    private const _DBHOSTNAME_ = "localhost";
+    private const _DBHOSTNAME_ = "lamp-mariadb106";
     private const _DBUSERNAME_ = "root";
     private const _DBPASSWORD_ = "tiger";
     private const _DBNAME_ = "docker";

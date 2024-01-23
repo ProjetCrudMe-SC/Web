@@ -8,20 +8,21 @@ use src\Utils\Guid\GuidGenerator;
 
 class Contact implements JsonSerializable
 {
-    private ?int $id = null;
+    private ?string $id = null;
     private ?string $firstName = null;
     private ?string $lastName = null;
     private ?string $phone = null;
     private ?string $email = null;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function setId(?int $id): void
+    public function setId(?string $id): Contact
     {
         $this->id = $id;
+        return $this;
     }
 
     public function getFirstName(): ?string

@@ -132,7 +132,22 @@ class Nursery implements JsonSerializable
     {
         try {
             $bdd = BDD::getInstance();
-            $requete = $bdd->prepare("INSERT INTO Nurseries (id, name, description, datePublication, town, imageRepository, imageFileName) VALUES(:id, :name, :description, :datePublication, :town, :imageRepository, :imageFileName)");
+
+            $requete = $bdd->prepare("INSERT INTO Coordinates (id, latitude, longitude) VALUES(:id, :latitude, :longitude)");
+            $execute = $requete->execute([
+                "id" => $this->getCoordinates()->getId(),
+                "latitude" => $this->getCoordinates()->getLatitude(),
+                "longitude" => $this->getCoordinates()->getLongitude(),
+            ]);
+
+            $requete = $bdd->prepare("INSERT INTO Contacts (id, email, phone) VALUES(:id, :email, :phone)");
+            $execute = $requete->execute([
+                "id" => $this->getContact()->getId(),
+                "email" => $this->getContact()->getEmail(),
+                "phone" => $this->getContact()->getPhone(),
+            ]);
+
+            $requete = $bdd->prepare("INSERT INTO Nurseries (id, name, description, datePublication, town, imageRepository, imageFileName, ContactId, CoordinatesId) VALUES(:id, :name, :description, :datePublication, :town, :imageRepository, :imageFileName, :contactId, :coordinatesId)");
 
             $execute = $requete->execute([
                 "id" => $this->getId(),
@@ -142,23 +157,10 @@ class Nursery implements JsonSerializable
                 "datePublication" => $this->getDatePublication()->format("Y-m-d"),
                 "imageRepository" => $this->getImageRepository(),
                 "imageFileName" => $this->getImageFileName(),
+                "contactId" => $this->getContact()->getId(),
+                "coordinatesId" => $this->getCoordinates()->getId(),
             ]);
 
-            $requete = $bdd->prepare("INSERT INTO Coordinates (id, latitude, longitude) VALUES(:id, :latitude, :longitude)");
-            $execute = $requete->execute([
-                "id" => GuidGenerator::GUID(),
-                "latitude" => $this->getCoordinates()->getLatitude(),
-                "longitude" => $this->getCoordinates()->getLongitude(),
-                "nurseryId" => $this->getId(),
-            ]);
-
-            $requete = $bdd->prepare("INSERT INTO Contacts (id, email, phone) VALUES(:id, :email, :phone)");
-            $execute = $requete->execute([
-                "id" => GuidGenerator::GUID(),
-                "email" => $this->getContact()->getEmail(),
-                "phone" => $this->getContact()->getPhone(),
-                "nurseryId" => $this->getId(),
-            ]);
             return [0, "Insertion OK", $bdd->lastInsertId()];
         } catch (\Exception $e) {
             return [1, $e->getMessage()];
@@ -231,21 +233,44 @@ class Nursery implements JsonSerializable
         return $nurserysObjet;
     }
 
-    public static function SqlFixtures()
+    public static function SqlFixtures(): void
     {
         $bdd = BDD::getInstance();
         $requete = $bdd->prepare('TRUNCATE TABLE Nurseries');
         $requete->execute();
         $arrayTown = array('Mont-Saint-Aignan', 'Rouen', 'Le Havre', 'Paris');
         $arrayTitre = array('Crescendo', 'Lumière d\'Étoiles Crèche', 'Douce Harmonie Maternelle', 'Sourires Radieux Nurserie');
+        $arrayEmail = array('crescendo@creche.fr', 'lec@creche.fr', 'douce-harmonie@creche.fr', 'sourires@creches.fr');
+        $arrayFirstName = array('Jean', 'Pierre', 'Paul', 'Jacques');
+        $arrayLastName = array('Dupont', 'Durand', 'Martin', 'Lefebvre');
+
+
         $dateajout = new \DateTime();
         for ($i = 1; $i <= 200; $i++) {
             shuffle($arrayTown);
             shuffle($arrayTitre);
-
+            shuffle($arrayEmail);
+            $coordinates = new Coordinates();
+            $latitude = rand(490000, 500000) / 10000;
+            $longitude = rand(490000, 500000) / 10000;
+            $coordinates
+                ->setId(GuidGenerator::GUID())
+                ->setLatitude($latitude)
+                ->setLongitude($longitude);
+            $contact = new Contact();
+            $contact
+                ->setId(GuidGenerator::GUID())
+                ->setEmail($arrayEmail[0])
+                ->setPhone('06' . rand(10000000, 99999999))
+                ->setFirstname($arrayFirstName[0])
+                ->setLastname($arrayLastName[0]);
+            $id = GuidGenerator::GUID();
             $dateajout->modify('+1 day');
             $nursery = new Nursery();
             $nursery
+                ->setId($id)
+                ->setCoordinates($coordinates)
+                ->setContact($contact)
                 ->setNameNursery($arrayTitre[0])
                 ->setDescription('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla euismod, nisl nec aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl')
                 ->setDatePublication($dateajout)
