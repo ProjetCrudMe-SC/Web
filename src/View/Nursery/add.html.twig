@@ -1,8 +1,8 @@
 {% extends "base.html.twig" %}
-{% block title %}ADMIN - {{ parent() }} - Ajout d'un Article {% endblock %}
+{% block title %}ADMIN - {{ parent() }} - Ajout d'une crèche {% endblock %}
 
 {% block body %}
-    <h1>Ajout Article</h1>
+    <h1>Ajout Crèche</h1>
 
     <form method="post" enctype="multipart/form-data">
 
@@ -19,11 +19,12 @@
         </div>
 
         <div class="mb-3">
-            <select class="form-select" name="Auteur">
-                <option value="Brice">Brice</option>
-                <option value="Bruno">Bruno</option>
-                <option value="Fabien">Fabien</option>
-                <option value="Benoit">Benoit</option>
+            <select class="form-select" name="Town">
+                <option value="Rouen">Rouen</option>
+                <option value="Mont-saint-aignan">Mont-saint-aignan</option>
+                <option value="Isneauville">Isneauville</option>
+                <option value="Bois-guillaume">Bois-guillaume</option>
+                <option value="Fécamp">Fécamp</option>
             </select>
         </div>
 

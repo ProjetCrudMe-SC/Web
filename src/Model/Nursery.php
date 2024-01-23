@@ -288,7 +288,7 @@ class Nursery implements JsonSerializable
     {
         $bdd = BDD::getInstance();
         try {
-            $requete = $bdd->prepare('UPDATE Nurseries SET titre=:titre, description=:description, datePublication=:datePublication, town=:town, imageRepository=:imageRepository, imageFileName=:imageFileName WHERE id=:id');
+            $requete = $bdd->prepare('UPDATE Nurseries SET Name=:Name, Description=:description, DatePublication=:datePublication, Town=:town, ImageRepository=:imageRepository, ImageFileName=:imageFileName WHERE Id=:id');
             $result = $requete->execute([
                 'name' => $this->getNameNursery(), 'description' => $this->getDescription(), 'datePublication' => $this->getDatePublication()->format("Y-m-d"), 'town' => $this->getTown(), 'imageRepository' => $this->getImageRepository(), 'imageFileName' => $this->getImageFileName(), 'id' => $this->getId()
             ]);

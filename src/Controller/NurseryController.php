@@ -5,6 +5,7 @@ namespace src\Controller;
 use DateTime;
 use Exception;
 use Mpdf\Mpdf;
+use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
 use Random\RandomException;
 use src\Model\Nursery;
@@ -52,6 +53,9 @@ class NurseryController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function delete(): void
     {
         UserController::protect(["Redacteur", "Administrateur", "Editeur"]);
@@ -69,7 +73,7 @@ class NurseryController extends AbstractController
      * @throws LoaderError
      * @throws Exception
      */
-    public function add()
+    public function add(): string
     {
         UserController::protect(["Redacteur", "Administrateur", "Editeur"]);
         if (isset($_POST["Titre"]) && isset($_POST["Description"])) {
@@ -109,7 +113,7 @@ class NurseryController extends AbstractController
             $mail->send(
                 from: "admin@votresite.com",
                 to: "admin@votresite.com",
-                subject: "Un nouvel Creche a été posté",
+                subject: "Une nouvelle Creche a été posté",
                 bodyHtml: $this->getTwig()->render("Mail/nursery.add.html.twig", [
                     "crèche" => $nursery
                 ])
@@ -204,6 +208,12 @@ class NurseryController extends AbstractController
         }
     }
 
+    /**
+     * @throws MpdfException
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function pdf(string $id): void
     {
         $nursery = Nursery::SqlGetById($id);
