@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 namespace src\Model;
 
 use Exception;
@@ -69,17 +70,17 @@ class Contact implements JsonSerializable
         return $this;
     }
 
-    public function SqlUpdate(): array
+    public static function SqlUpdate(String $id, String $firstName, String $lastName, String $phone, String $email): array
     {
         $bdd = BDD::getInstance();
         try {
             $requete = $bdd->prepare('UPDATE Contacts SET Firstname=:Firstname, Lastname=:Lastname, Phone=:Phone, Email=:Email WHERE Id=:Id');
-            $result = $requete->execute([
-                'Id' => $this->getId(),
-                'Firstname' => $this->getFirstName(),
-                'Lastname' => $this->getLastName(),
-                'Phone' => $this->getPhone(),
-                'Email' => $this->getEmail()
+            $requete->execute([
+                'Id' => $id,
+                'Firstname' => $firstName,
+                'Lastname' => $lastName,
+                'Phone' => $phone,
+                'Email' => $email
             ]);
 
             return [0, "[OK] Mise à jour"];
@@ -88,20 +89,20 @@ class Contact implements JsonSerializable
         }
     }
 
-    public function SqlAdd() :array {
+    public static function SqlAdd(String $id, String $firstName, String $lastName, String $phone, String $email) :array {
         $bdd = BDD::getInstance();
         try {
             $requete = $bdd->prepare("
-            INSERT INTO Contacts (Id, Firstname, Lastname, Email, Phone)
-            VALUES(:id, :Firstname, :Lastname, :Email, :Phone)");
-            $requete->execute([
-                "Id" => GuidGenerator::GUID(),
-                "Firstname" => $this->getFirstName(),
-                "Lastname" => $this->getLastName(),
-                "Email" => $this->getEmail(),
-                "Phone" => $this->getPhone(),
-            ]);
-            return [0, "[OK] Mise à jour"];
+            INSERT INTO Contacts (Id, Firstname, Lastname, Phone, Email)
+            VALUES(:id, :Firstname, :Lastname, :Phone, :Email)");
+            $requete->bindParam(":id", $id);
+            $requete->bindParam(":Firstname", $firstName);
+            $requete->bindParam(":Lastname", $lastName);
+            $requete->bindParam(":Phone", $phone);
+            $requete->bindParam(":Email", $email);
+            $requete->execute();
+
+            return [0, "[OK] Ajout"];
         } catch (Exception $e) {
             return [1, "[ERREUR] " . $e->getMessage()];
         }

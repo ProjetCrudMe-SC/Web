@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 namespace src\Controller;
 
 use DateTime;
@@ -8,8 +9,12 @@ use Mpdf\Mpdf;
 use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
 use Random\RandomException;
+use RuntimeException;
+use src\Model\Contact;
+use src\Model\Coordinates;
 use src\Model\Nursery;
 use src\Service\MailService;
+use src\Utils\Guid\GuidGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -30,6 +35,9 @@ class NurseryController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws RandomException
+     */
     public function fixtures(): string
     {
         Nursery::SqlFixtures();
@@ -64,7 +72,7 @@ class NurseryController extends AbstractController
                 Nursery::SqlDelete($_POST["id"]);
             }
         }
-        header("Location: /Creche/all");
+        header("Location: /Nursery/all");
     }
 
     /**
@@ -76,48 +84,70 @@ class NurseryController extends AbstractController
     public function add(): string
     {
         UserController::protect(["Redacteur", "Administrateur", "Editeur"]);
-        if (isset($_POST["Titre"]) && isset($_POST["Description"])) {
+        if (isset($_POST["Name"]) && isset($_POST["Description"])) {
             $sqlRepository = null;
             $nomImage = null;
 
             if (!empty($_FILES["Image"]["name"])) {
-                $tabExt = ["jpg", "jpeg", "gif", "png"]; // Extension autorisée
+                $tabExt = ["jpg", "jpeg", "gif", "png"];
                 $extension = pathinfo($_FILES["Image"]["name"], PATHINFO_EXTENSION);
                 if (in_array(strtolower($extension), $tabExt)) {
-                    //Fabriquer le répertoire d'auccil façon Wrodpress (YYYY/MM)
                     $dateNow = new DateTime();
                     $repository = "./uploads/images/{$dateNow->format("Y/m")}";
                     if (!is_dir($repository)) {
-                        mkdir($repository, 0777, true);
+                        if (!mkdir($repository, 0777, true) && !is_dir($repository)) {
+                            throw new \RuntimeException(sprintf('Directory "%s" was not created', $repository));
+                        }
                     }
                     $sqlRepository = $dateNow->format("Y/m");
-                    //Renommer le fichier image à la volée
-                    $nomImage = md5(uniqid()) . "." . $extension;
-                    //Upload du fichier
+                    $nomImage = md5(uniqid('', true)) . "." . $extension;
                     move_uploaded_file($_FILES["Image"]["tmp_name"], $repository . "/" . $nomImage);
                 }
             }
 
+            $coordinates = new Coordinates();
+            $coordinates
+                ->setId(GuidGenerator::GUID())
+                ->setLatitude((float)$_POST["Latitude"])
+                ->setLongitude((float)$_POST["Longitude"]);
+            Coordinates::SqlAdd($coordinates->getId(), $coordinates->getLatitude(), $coordinates->getLongitude());
+            $contact = new Contact();
+            $contact
+                ->setId(GuidGenerator::GUID())
+                ->setLastName($_POST["Lastname"])
+                ->setFirstName($_POST["Firstname"])
+                ->setEmail($_POST["Email"])
+                ->setPhone($_POST["Phone"]);
+            Contact::SqlAdd($contact->getId(), $contact->getFirstName(), $contact->getLastName(), $contact->getEmail(), $contact->getPhone());
             $nursery = new Nursery();
-            $nursery->setTown($_POST["Town"])
+            $nursery
+                ->setId(GuidGenerator::GUID())
+                ->setTown($_POST["Town"])
                 ->setDescription($_POST["Description"])
                 ->setDatePublication(new DateTime($_POST["DatePublication"]))
                 ->setNameNursery($_POST["Name"])
                 ->setImageRepository($sqlRepository)
                 ->setImageFileName($nomImage);
-            $result = $nursery->SqlAdd();
+            Nursery::SqlAdd(
+                $nursery->getNameNursery(),
+                $nursery->getDescription(),
+                $nursery->getTown(),
+                $nursery->getImageRepository(),
+                $nursery->getImageFileName(),
+                $nursery->getDatePublication(),
+                $coordinates->getId(),
+                $contact->getId());
 
-            //Envoi du mail
-            $nursery->setId($result[2]);
-            $mail = new MailService();
-            $mail->send(
-                from: "admin@votresite.com",
-                to: "admin@votresite.com",
-                subject: "Une nouvelle Creche a été posté",
-                bodyHtml: $this->getTwig()->render("Mail/nursery.add.html.twig", [
-                    "crèche" => $nursery
-                ])
-            );
+//            $nursery->setId($result[2]);
+//            $mail = new MailService();
+//            $mail->send(
+//                from: "admin@votresite.com",
+//                to: "admin@votresite.com",
+//                subject: "Une nouvelle crèche a été posté",
+//                bodyHtml: $this->getTwig()->render("Mail/nursery.add.html.twig", [
+//                    "crèche" => $nursery
+//                ])
+//            );
 
             header("Location: /Nursery/all");
         }
@@ -128,6 +158,7 @@ class NurseryController extends AbstractController
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws LoaderError
+     * @throws Exception
      */
     public function show(string $id): string
     {
@@ -144,68 +175,78 @@ class NurseryController extends AbstractController
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
+     * @throws Exception
      */
     public function update(string $id)
     {
+        error_reporting(E_ALL);
+        ob_start();
         $nursery = Nursery::SqlGetById($id);
-        if ($nursery != null) {
-            if (isset($_POST["Name"]) && isset($_POST["Description"]) && isset($_POST["DatePublication"]) && isset($_POST["Town"])) {
-                // Repris de la version "classic"
+        if ($nursery !== null) {
+            if (isset($_POST["NameNursery"], $_POST["Description"], $_POST["DatePublication"], $_POST["Town"], $_POST["Firstname"], $_POST["Lastname"], $_POST["Email"], $_POST["Phone"], $_POST["Latitude"], $_POST["Longitude"])) {
                 $sqlRepository = null;
                 $nomImage = null;
-
                 if (!empty($_FILES['Image']['name'])) {
                     $tabExt = ['jpg', 'gif', 'png', 'jpeg'];    // Extensions autorisees
                     $extension = pathinfo($_FILES['Image']['name'], PATHINFO_EXTENSION);
-                    // strtolower = on compare ce qui est comparage (JPEG =! jpeg)
                     if (in_array(strtolower($extension), $tabExt)) {
-                        // Fabrication du répertoire d'accueil façon "Wordpress" (YYYY/MM)
                         $dateNow = new DateTime();
                         $sqlRepository = $dateNow->format('Y/m');
                         $repository = './uploads/images/' . $dateNow->format('Y/m');
                         if (!is_dir($repository)) {
-                            mkdir($repository, 0777, true);
+                            if (!mkdir($repository, 0777, true) && !is_dir($repository)) {
+                                throw new RuntimeException(sprintf('Directory "%s" was not created', $repository));
+                            }
                         }
-                        // Renommage du fichier (d'où l'intéret d'avoir isolé l'extension
-                        $nomImage = md5(uniqid()) . '.' . $extension;
+                        $nomImage = md5(uniqid('', true)) . '.' . $extension;
 
-                        //Upload du fichier, voilà c'est fini !
                         move_uploaded_file($_FILES['Image']['tmp_name'], $repository . '/' . $nomImage);
 
-                        // suppression ancienne image si existante
-                        if ($_POST['imageAncienne'] != '' && $_POST['imageAncienne'] != '/' && file_exists("../../public/uploads/images/{$_POST["imageAncienne"]}")) {
+                        if ($_POST['imageAncienne'] !== '' && $_POST['imageAncienne'] !== '/' && file_exists("../../public/uploads/images/{$_POST["imageAncienne"]}")) {
                             unlink("./uploads/images/{$_POST['imageAncienne']}");
                         }
                     }
                 }
 
-                //On réutilise l'objet Creche créé au début de la méthode
+                $coordinates = $nursery->getCoordinates();
+                if($coordinates === null){
+                    error_log("Coordinates est null");
+                }
+                Coordinates::SqlUpdate($_POST["CoordinatesId"], $_POST["Latitude"], $_POST["Longitude"]);
+
+                $contact = $nursery->getContact();
+                if($contact === null){
+                    error_log("Contact est null");
+                }
+               Contact::SqlUpdate($_POST["ContactId"], $_POST["Firstname"], $_POST["Lastname"], $_POST["Phone"], $_POST["Email"]);
+
                 $date = new DateTime($_POST["DatePublication"]);
-                $nursery->setNameNursery($_POST["Name"])
+                $nursery
+                    ->setNameNursery($_POST["NameNursery"])
                     ->setDescription($_POST["Description"])
                     ->setDatePublication($date)
                     ->setTown($_POST["Town"])
                     ->setImageRepository($sqlRepository)
                     ->setImageFileName($nomImage);
+                var_dump('here');
                 $result = $nursery->SqlUpdate();
-
-                if ($result[0] == "1") {
-                    if ($nomImage != null) {
-                        unlink($repository . '/' . $nomImage);
-                    }
+                if (($result[0] === "1") && $nomImage !== null) {
+                    unlink($repository . '/' . $nomImage);
                 }
-
-                header("Location:/Nursery/update/$id");
-            } else {
-                return $this->getTwig()->render('Nursery/update.html.twig', [
-                    "Nursery" => $nursery
-                ]);
+                error_log("Valeur de $_POST : " . print_r($_POST, true));
+                header("Location: /Nursery/update/$id");
+                ob_end_flush();
+                exit();
             }
 
-        } else {
-            header("Location:/Nursery/all");
-
+            return $this->getTwig()->render('Nursery/update.html.twig', [
+                "nursery" => $nursery,
+                'post' => $_POST
+            ]);
         }
+
+        header("Location: /Nursery/all");
+        exit();
     }
 
     /**
@@ -213,6 +254,7 @@ class NurseryController extends AbstractController
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
+     * @throws Exception
      */
     public function pdf(string $id): void
     {

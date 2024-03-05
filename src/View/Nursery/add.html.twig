@@ -3,21 +3,22 @@
 
 {% block body %}
     <h1>Ajout Crèche</h1>
-
     <form method="post" enctype="multipart/form-data">
-
         <div class="mb-3">
-            <input type="text" class="form-control" placeholder="Saisir un titre" name="Titre">
+            <label>
+                <input type="text" class="form-control" placeholder="Saisir un titre" name="Name">
+            </label>
         </div>
-
         <div class="mb-3">
-            <textarea class="form-control" name="Description" rows="3"></textarea>
+            <label>
+                <textarea class="form-control" name="Description" rows="3"></textarea>
+            </label>
         </div>
-
         <div class="mb-3">
-            <input type="date" class="form-control" name="DatePublication">
+            <label>
+                <input type="date" class="form-control" name="DatePublication">
+            </label>
         </div>
-
         <div class="mb-3">
             <select class="form-select" name="Town">
                 <option value="Rouen">Rouen</option>
@@ -27,14 +28,33 @@
                 <option value="Fécamp">Fécamp</option>
             </select>
         </div>
-
+        <h3>Contact</h3>
+        <div class="mb-3">
+            <label>
+                <input type="text" class="form-control" placeholder="email" name="Email">
+            </label>
+            <label>
+                <input type="text" class="form-control" placeholder="telephone" name="Phone">
+            </label>
+            <label>
+                <input type="text" class="form-control" placeholder="prénom" name="Firstname">
+            </label>
+            <label>
+                <input type="text" class="form-control" placeholder="nom" name="Lastname">
+            </label>
+        </div>
+        <div class="mb-4">
+            <h3>Coordonnées</h3>
+            <label>
+                <input type="number" step="any" class="form-control" placeholder="latitude" name="Latitude">
+            </label>
+            <label>
+                <input type="number" step="any" class="form-control" placeholder="longitutde" name="Longitude">
+            </label>
+        </div>
         <div class="mb-3">
             <input type="file" class="custom-file-input" name="Image">
         </div>
-
-
         <button type="submit" class="btn btn-primary">Valider</button>
     </form>
-
-
 {% endblock %}

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace src\Service;
 
 
@@ -6,7 +7,7 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mime\Email;
 
-class MailService{
+class MailService {
     private Mailer $mailer;
 
     public function __construct(){
