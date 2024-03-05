@@ -5,6 +5,11 @@
         "firebase/php-jwt": "^6.9",
         "laminas/laminas-config": "^2.5",
         "mpdf/mpdf": "^8.2",
-      "ext-pdo": "*"
+      "ext-pdo": "*",
+      "ext-fileinfo": "*",
+        "ext-exif": "*"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.10"
     }
 }
