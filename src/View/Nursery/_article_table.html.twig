@@ -1,0 +1,28 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Titre</th>
+        <th scope="col">Date de Publication</th>
+        <th scope="col">Qui a écrit ?</th>
+        <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for nursery in Nurseries %}
+        <tr>
+            <td><a href="/Nursery/update/{{ nursery.Id }}">{{ nursery.Id }}</a></td>
+            <td><a href="/Nursery/show/{{ nursery.Id }}">{{ nursery.NameNursery }}</a></td>
+            <td>{{ nursery.DatePublication|date("d/m/Y") }}</td>
+            <td>{{ nursery.Description }}</td>
+            <td>
+                <form method="post" action="/Nursery/delete">
+                    <input type="hidden" name="id" value="{{ nursery.Id }}">
+                    <input type="hidden" name="tokenCSRF" value="{{ tokenCSRF }}">
+                    <button type="submit" class="btn btn-danger"> Supprimer</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,9 @@
+<h1>{{ nursery.titre }}</h1>
+<p><strong>Description :</strong>{{ nursery.description }}</p>
+<p><strong>Auteur :</strong>{{ nursery.Auteur }}</p>
+<p><strong>Date :</strong>{{ nursery.date|date("d/m/Y") }}</p>
+<p>
+    {% if file_exist( './uploads/images/'~nursery.ImageRepository~'/'~nursery.ImageFileName ) and nursery.ImageFileName !="" %}
+        <img src="/uploads/images/{{ nursery.ImageRepository }}/{{ nursery.ImageFileName }}" class="img-thumbnail"/>
+    {% endif %}
+</p>

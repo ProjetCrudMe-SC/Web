@@ -1,0 +1,40 @@
+{% extends "base.html.twig" %}
+{% block title %}ADMIN - {{ parent() }} - Ajout d'une crèche {% endblock %}
+
+{% block body %}
+    <h1>Ajout Crèche</h1>
+
+    <form method="post" enctype="multipart/form-data">
+
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Saisir un titre" name="Titre">
+        </div>
+
+        <div class="mb-3">
+            <textarea class="form-control" name="Description" rows="3"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <input type="date" class="form-control" name="DatePublication">
+        </div>
+
+        <div class="mb-3">
+            <select class="form-select" name="Town">
+                <option value="Rouen">Rouen</option>
+                <option value="Mont-saint-aignan">Mont-saint-aignan</option>
+                <option value="Isneauville">Isneauville</option>
+                <option value="Bois-guillaume">Bois-guillaume</option>
+                <option value="Fécamp">Fécamp</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <input type="file" class="custom-file-input" name="Image">
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Valider</button>
+    </form>
+
+
+{% endblock %}

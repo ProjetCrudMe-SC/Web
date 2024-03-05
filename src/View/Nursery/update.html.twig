@@ -1,0 +1,53 @@
+{% extends "base.html.twig" %}
+{% block title %}ADMIN - {{ parent() }} - Update d'une Crèche {% endblock %}
+{% block body %}
+    <h1>Modification Crèche</h1>
+
+    <form method="post" enctype="multipart/form-data">
+
+        <div class="mb-3">
+            <label>
+                <input type="text" class="form-control" placeholder="Saisir un nom" name="NameNursery" value="{{ nursery.NameNursery }}">
+            </label>
+        </div>
+
+        <div class="mb-3">
+            <label>
+                <textarea class="form-control" name="Description" rows="3">{{ nursery.Description }}</textarea>
+            </label>
+        </div>
+
+        <div class="mb-3">
+            <label>
+                <input type="date" class="form-control" name="DatePublication" value="{{ nursery.DatePublication|date("Y-m-d") }}">
+            </label>
+        </div>
+
+        <div class="mb-3">
+
+            <label>
+                <select class="form-select" name="Town">
+                    <option value="Rouen" {% if (nursery.Town == "Rouen") %}selected{% endif %}>Rouen</option>
+                    <option value="Mont-saint-aignan" {% if (nursery.Town == "Mont-saint-aignan") %}selected{% endif %}>Mont-saint-aignan</option>
+                    <option value="Isneauville" {% if (nursery.Town == "Isneauville") %}selected{% endif %}>Isneauville</option>
+                    <option value="Bois-guillaume" {% if (nursery.Town == "Bois-guillaume") %}selected{% endif %}>Bois-guillaume</option>
+                    <option value="Fécamp" {% if (nursery.Town == "Fécamp") %}selected{% endif %}>Fécamp</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="mb-3">
+            <input type="file" class="custom-file-input" name="Image">
+        </div>
+        {% if file_exist( './uploads/images/'~nursery.ImageRepository~'/'~nursery.ImageFileName ) and nursery.ImageFileName !="" %}
+            <div class="mb-3">
+                <img src="/uploads/images/{{ nursery.ImageRepository }}/{{ nursery.ImageFileName }}" class="img-thumbnail"/>
+            </div>
+        {% endif %}
+        <input type="hidden" name="imageAncienne"  value="{{ nursery.ImageRepository}}/{{ nursery.ImageFileName}}">
+
+        <button type="submit" class="btn btn-primary">Valider</button>
+    </form>
+
+
+{% endblock %}

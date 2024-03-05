@@ -1,17 +1,18 @@
 <?php
 namespace src\Controller;
 
-use src\Model\Article;
+use src\Model\Nursery;
 use src\Service\JwtService;
 
-class ApiArticleController{
+class ApiNurseryController{
 
     public function __construct(){
         header('Content-Type: application/json; charset=utf-8');
     }
 
     //GET ALL
-    public function getAll(){
+    public function getAll(): false|string
+    {
         if($_SERVER["REQUEST_METHOD"] != "GET"){
                 header("HTTP/1.1 404 Not Found");
             return json_encode("Erreur de méthode (GET attendu)");
@@ -22,11 +23,12 @@ class ApiArticleController{
             return json_encode($result);
         }
 
-        $articles = Article::SqlGetAll();
-        return json_encode($articles);
+        $nursery = Nursery::SqlGetAll();
+        return json_encode($nursery);
     }
 
-    public function add(){
+    public function add(): false|string
+    {
         if($_SERVER["REQUEST_METHOD"] != "POST"){
             header("HTTP/1.1 404 Not Found");
             return json_encode("Erreur de méthode (POST attendu)");
@@ -37,11 +39,11 @@ class ApiArticleController{
             return json_encode("Erreur il manque des données)");
         }
 
-        $article = new Article();
-        $article->setTitre($_POST["Titre"])
+        $article = new Nursery();
+        $article->setNameNursery($_POST["Titre"])
             ->setDescription($_POST["Description"])
             ->setDatePublication(new \DateTime($_POST["DatePublication"]))
-            ->setAuteur($_POST["Auteur"]);
+            ->setTown($_POST["Town"]);
         $result = $article->SqlAdd();
         return json_encode($result);
     }
@@ -64,22 +66,12 @@ class ApiArticleController{
 
 
 
-        $article = new Article();
-        $article->setTitre($data->Titre)
+        $nursery = new Nursery();
+        $nursery->setNameNursery($data->Titre)
             ->setDescription($data->Description)
             ->setDatePublication(new \DateTime($data->DatePublication))
-            ->setAuteur($data->Auteur);
-        $result = $article->SqlAdd();
+            ->setTown($data->Town);
+        $result = $nursery->SqlAdd();
         return json_encode($result);
     }
 }
-
-
-
-
-
-
-
-
-
-

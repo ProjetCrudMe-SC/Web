@@ -10,7 +10,7 @@ class MailService{
     private Mailer $mailer;
 
     public function __construct(){
-        $transport = Transport::fromDsn("smtp://3dd84281bc8679:8a9180301c670a@sandbox.smtp.mailtrap.io:2525");
+        $transport = Transport::fromDsn("");
         $this->mailer = new Mailer($transport);
     }
 
@@ -24,11 +24,3 @@ class MailService{
         $this->mailer->send($email);
     }
 }
-
-
-
-
-
-
-
-
