@@ -1,14 +1,23 @@
 <?php
 
+declare(strict_types=1);
 namespace src\Model;
 
 use JsonSerializable;
+use Override;
+use Random\RandomException;
+use src\Utils\Guid\GuidGenerator;
 
 class Coordinates implements JsonSerializable
 {
     private ?string $Id = null;
     private ?float $Latitude = null;
     private ?float $Longitude = null;
+
+    /**
+     * @throws RandomException
+     */
+
 
     public function getId(): ?string
     {
@@ -66,6 +75,7 @@ class Coordinates implements JsonSerializable
 
             return null;
         } catch (\Exception $e) {
+            debug_to_console($e->getMessage());
             return null;
         }
     }
@@ -91,7 +101,7 @@ class Coordinates implements JsonSerializable
         return $coordinatesObjects;
     }
 
-    public function SqlAdd(): array
+    public static function SqlAdd(String $id, float $latitude, float $longitude): array
     {
         try {
             $bdd = BDD::getInstance();
@@ -99,9 +109,9 @@ class Coordinates implements JsonSerializable
                 INSERT INTO Coordinates (Id, Latitude, Longitude)
                 VALUES(:id, :latitude, :longitude)");
             $requete->execute([
-                "id" => $this->getId(),
-                "latitude" => $this->getLatitude(),
-                "longitude" => $this->getLongitude(),
+                "id" => $id,
+                "latitude" => $latitude,
+                "longitude" => $longitude,
             ]);
 
             return [0, "[OK] Ajout effectué"];
@@ -110,15 +120,15 @@ class Coordinates implements JsonSerializable
         }
     }
 
-    public function SqlUpdate(): array
+    public static function SqlUpdate(String $id, float $latitude, float $longitude): array
     {
         try {
             $bdd = BDD::getInstance();
             $requete = $bdd->prepare('UPDATE Coordinates SET Latitude=:latitude, Longitude=:longitude WHERE Id=:id');
-            $result = $requete->execute([
-                'id' => $this->getId(),
-                'latitude' => $this->getLatitude(),
-                'longitude' => $this->getLongitude(),
+            $requete->execute([
+                'id' => $id,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
             ]);
 
             return [0, "[OK] Mise à jour"];
@@ -142,7 +152,7 @@ class Coordinates implements JsonSerializable
         }
     }
 
-    #[\Override]
+    #[Override]
     public function jsonSerialize(): array
     {
         return [

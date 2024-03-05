@@ -2,52 +2,108 @@
 {% block title %}ADMIN - {{ parent() }} - Update d'une Crèche {% endblock %}
 {% block body %}
     <h1>Modification Crèche</h1>
-
     <form method="post" enctype="multipart/form-data">
-
         <div class="mb-3">
             <label>
-                <input type="text" class="form-control" placeholder="Saisir un nom" name="NameNursery" value="{{ nursery.NameNursery }}">
+                <input type="text" class="form-control" placeholder="Saisir un nom" name="NameNursery"
+                       value="{{ nursery.NameNursery }}">
             </label>
         </div>
-
         <div class="mb-3">
             <label>
-                <textarea class="form-control" name="Description" rows="3">{{ nursery.Description }}</textarea>
+                <textarea class="form-control" name="Description" rows="3">{{ nursery.Description }} </textarea>
             </label>
         </div>
-
         <div class="mb-3">
             <label>
-                <input type="date" class="form-control" name="DatePublication" value="{{ nursery.DatePublication|date("Y-m-d") }}">
+                <input type="date" class="form-control" name="DatePublication"
+                       value="{{ nursery.DatePublication|date("Y-m-d") }}">
             </label>
         </div>
-
         <div class="mb-3">
-
-            <label>
+            <label for="Town">
                 <select class="form-select" name="Town">
-                    <option value="Rouen" {% if (nursery.Town == "Rouen") %}selected{% endif %}>Rouen</option>
-                    <option value="Mont-saint-aignan" {% if (nursery.Town == "Mont-saint-aignan") %}selected{% endif %}>Mont-saint-aignan</option>
-                    <option value="Isneauville" {% if (nursery.Town == "Isneauville") %}selected{% endif %}>Isneauville</option>
-                    <option value="Bois-guillaume" {% if (nursery.Town == "Bois-guillaume") %}selected{% endif %}>Bois-guillaume</option>
-                    <option value="Fécamp" {% if (nursery.Town == "Fécamp") %}selected{% endif %}>Fécamp</option>
+                    <option value="Rouen" {% if (nursery.Town == "Rouen") %} selected {% endif %}>Rouen</option>
+                    <option value="Mont-saint-aignan" {% if (nursery.Town == "Mont-saint-aignan") %} selected {% endif %}>
+                        Mont-saint-aignan
+                    </option>
+                    <option value="Isneauville" {% if (nursery.Town == "Isneauville") %} selected {% endif %}>
+                        Isneauville
+                    </option>
+                    <option value="Bois-guillaume" {% if (nursery.Town == "Bois-guillaume") %} selected {% endif %}>
+                        Bois-guillaume
+                    </option>
+                    <option value="Fécamp" {% if (nursery.Town == "Fécamp") %} selected {% endif %}>Fécamp</option>
                 </select>
             </label>
         </div>
-
+        <div class="mb-4">
+            <h3>Contact</h3>
+            <label for="ContactId">
+                <input type="hidden" class="form-control" name="ContactId" value="{{ nursery.Contact.Id }}">
+            </label>
+            <label for="Firstname">
+                <input type="text" class="form-control" placeholder="Prénom" name="Firstname"
+                       value="{{ nursery.Contact.firstName }}">
+            </label>
+            <label for="Lastname">
+                <input type="text" class="form-control" placeholder="Nom de famille" name="Lastname"
+                       value="{{ nursery.Contact.lastName }}">
+            </label>
+            <label for="Phone">
+                <input type="text" class="form-control" placeholder="Téléphone" name="Phone"
+                       value="{{ nursery.Contact.phone }}">
+            </label>
+            <label for="Email">
+                <input type="text" class="form-control" placeholder="Email" name="Email"
+                       value="{{ nursery.Contact.email }}">
+            </label>
+        </div>
+        <div class="mb-4">
+            <h3>Coordonées</h3>
+            <div id="map" style="height: 400px;"></div>
+            <script>
+                const map = L.map('map').setView([{{ nursery.Coordinates.Latitude }}, {{ nursery.Coordinates.Longitude }}], 6);
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+                let marker;
+                L.marker([{{ nursery.Coordinates.Latitude }}, {{ nursery.Coordinates.Longitude }}]).addTo(map);
+                map.on('click', function (e) {
+                    const latitudeInput = document.getElementById('Latitude');
+                    const longitudeInput = document.getElementById('Longitude');
+                    latitudeInput.value = e.latlng.lat.toFixed(6);
+                    longitudeInput.value = e.latlng.lng.toFixed(6);
+                    if (marker) {
+                        map.removeLayer(marker);
+                    }
+                    marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+                });
+            </script>
+            <label for="CoordinatesId">
+                <input type="hidden" class="form-control" id="CoordinatesId" name="CoordinatesId"
+                       value="{{ nursery.Coordinates.Id }}">
+            </label>
+            <label for="Latitude">
+                <input type="number" step="any" class="form-control" placeholder="Latitude" id="Latitude"
+                       name="Latitude" value="{{ nursery.Coordinates.Latitude }}">
+            </label>
+            <label for="Longitude">
+                <input type="number" step="any" class="form-control" placeholder="Longitude" id="Longitude"
+                       name="Longitude" value="{{ nursery.Coordinates.Longitude }}">
+            </label>
+        </div>
         <div class="mb-3">
             <input type="file" class="custom-file-input" name="Image">
         </div>
         {% if file_exist( './uploads/images/'~nursery.ImageRepository~'/'~nursery.ImageFileName ) and nursery.ImageFileName !="" %}
             <div class="mb-3">
-                <img src="/uploads/images/{{ nursery.ImageRepository }}/{{ nursery.ImageFileName }}" class="img-thumbnail"/>
+                <img src="/uploads/images/{{ nursery.ImageRepository }}/{{ nursery.ImageFileName }}"
+                     class="img-thumbnail" alt="Image"/>
             </div>
         {% endif %}
-        <input type="hidden" name="imageAncienne"  value="{{ nursery.ImageRepository}}/{{ nursery.ImageFileName}}">
-
+        <input type="hidden" name="imageAncienne" value="{{ nursery.ImageRepository }}/{{ nursery.ImageFileName }}">
         <button type="submit" class="btn btn-primary">Valider</button>
     </form>
-
-
 {% endblock %}

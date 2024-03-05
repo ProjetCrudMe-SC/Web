@@ -1,19 +1,24 @@
 <?php
+
+declare(strict_types=1);
 namespace src\Model;
 
-class User {
-    private ?int $Id = null;
-    private String $NomPrenom;
-    private String $Mail;
-    private String $Password;
-    private Array $Roles;
+use src\Utils\Guid\GuidGenerator;
 
-    public function getId(): ?int
+class User
+{
+    private ?string $Id = null;
+    private string $NomPrenom;
+    private string $Mail;
+    private string $Password;
+    private array $Roles;
+
+    public function getId(): ?string
     {
         return $this->Id;
     }
 
-    public function setId(?int $Id): User
+    public function setId(?string $Id): User
     {
         $this->Id = $Id;
         return $this;
@@ -63,43 +68,45 @@ class User {
         return $this;
     }
 
-    public static function SqlAdd(User $user) :array{
+    public static function SqlAdd(User $user): array
+    {
         $bdd = BDD::getInstance();
-        try{
-            $req = $bdd->prepare("INSERT INTO users (NomPrenom, Email, Password, Roles) VALUES(:NomPrenom, :Email, :Password, :Roles)");
+        try {
+            $req = $bdd->prepare("INSERT INTO Users (Id, NomPrenom, Email, Password, Roles) VALUES(:Id, :NomPrenom, :Email, :Password, :Roles)");
             $req->execute([
+                "Id" => GuidGenerator::GUID(),
                 "NomPrenom" => $user->getNomPrenom(),
                 "Email" => $user->getMail(),
                 "Password" => $user->getPassword(),
-                "Roles" => json_encode($user->getRoles()),
+                "Roles" => json_encode($user->getRoles(), JSON_THROW_ON_ERROR),
             ]);
 
-            return [0,"Insertion OK", $bdd->lastInsertId()];
-        }catch (\Exception $e){
-            return [1,"ERROR => {$e->getMessage()}"];
+            return [0, "Insertion OK", $bdd->lastInsertId()];
+        } catch (\Exception $e) {
+            return [1, "ERROR => {$e->getMessage()}"];
         }
     }
 
-    public static function SqlGetByMail($mail) : ?User{
+    public static function SqlGetByMail($mail): ?User
+    {
         $bdd = BDD::getInstance();
-        $requete = $bdd->prepare('SELECT * FROM users WHERE Email=:mail');
+        $requete = $bdd->prepare('SELECT * FROM Users WHERE Email=:mail');
         $requete->execute([
-            "mail"=> $mail
+            "mail" => $mail
         ]);
 
         $userSql = $requete->fetch(\PDO::FETCH_ASSOC);
-        if($userSql!= false){
+        if ($userSql) {
             $user = new User();
-            $user ->setMail($userSql ["Email"])
-                ->setNomPrenom($userSql ["NomPrenom"])
-                ->setId($userSql ["Id"])
-                ->setPassword($userSql ["Password"])
+            $user->setMail($userSql["Email"])
+                ->setNomPrenom($userSql["NomPrenom"])
+                ->setId($userSql["Id"])
+                ->setPassword($userSql["Password"])
                 ->setRoles(json_decode($userSql["Roles"]));
             return $user;
         }
         return null;
     }
-
 
 
 }

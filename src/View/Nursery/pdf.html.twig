@@ -1,9 +1,23 @@
-<h1>{{ nursery.titre }}</h1>
-<p><strong>Description :</strong>{{ nursery.description }}</p>
-<p><strong>Auteur :</strong>{{ nursery.Auteur }}</p>
-<p><strong>Date :</strong>{{ nursery.date|date("d/m/Y") }}</p>
+<h1>{{ nursery.NameNursery }}</h1>
+<div>
+    <p>Description : {{ nursery.Description }}</p>
+    <p>Date : {{ nursery.datePublication|date("d/m/Y") }}</p>
+</div>
+<div>
+    <h2>Contact</h2>
+    <p>Prénom : {{ nursery.Contact.firstname }}</p>
+    <p>Nom : {{ nursery.Contact.lastname }}</p>
+    <p>Téléphone : {{ nursery.Contact.phone }}</p>
+    <p>Email : {{ nursery.Contact.mail }}</p>
+</div>
+<div>
+    <h2>Lieu</h2>
+    <p>Ville : {{ nursery.Town }}</p>
+    <p>Latitude : {{ nursery.Coordinates.Latitude }}</p>
+    <p>Lontitude : {{ nursery.coordinates.Longitutde }}</p>
+</div>
 <p>
     {% if file_exist( './uploads/images/'~nursery.ImageRepository~'/'~nursery.ImageFileName ) and nursery.ImageFileName !="" %}
-        <img src="/uploads/images/{{ nursery.ImageRepository }}/{{ nursery.ImageFileName }}" class="img-thumbnail"/>
+        <img src="/uploads/images/{{ nursery.ImageRepository }}/{{ nursery.ImageFileName }}" class="img-thumbnail" alt="Image"/>
     {% endif %}
 </p>
