@@ -68,7 +68,8 @@ class NurseryController extends AbstractController
     {
         UserController::protect(["Administrateur"]);
         if (isset($_POST["id"]) && $_SESSION["token"] === $_POST["tokenCSRF"]) {
-            Nursery::SqlDelete($_POST["id"]);
+            $result = Nursery::SqlDelete($_POST["id"]);
+            var_dump($result);
         }
         header("Location: /Nursery/all");
     }

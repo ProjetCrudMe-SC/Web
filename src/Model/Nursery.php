@@ -349,10 +349,10 @@ class Nursery implements JsonSerializable
     {
         $bdd = BDD::getInstance();
         $req = $bdd->prepare("SELECT * FROM Nurseries WHERE Id=:Id");
-        $req->execute([
-            'Id' => $id
-        ]);
-        if($req->fetch()){
+        $req->bindParam(':Id', $id);
+        $req->execute();
+        $nurserySql = $req->fetch(PDO::FETCH_ASSOC);
+        if (!$nurserySql) {
             return false;
         }
         $req = $bdd->prepare("DELETE FROM Nurseries WHERE Id=:Id");
@@ -417,7 +417,7 @@ class Nursery implements JsonSerializable
         return null;
     }
 
-    public static function SqlAdd(String $name, String $description, String $town, String $imageRepository, String $imageFileName, DateTime $datePublication, String $coordinatesId, String $contactId): array
+    public static function SqlAdd(string $name, string $description, string $town, string $imageRepository, string $imageFileName, DateTime $datePublication, string $coordinatesId, string $contactId): array
     {
         $bdd = BDD::getInstance();
         try {
