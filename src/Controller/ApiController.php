@@ -35,13 +35,7 @@ class ApiController
             return json_encode("Erreur de méthode (GET attendu)", JSON_THROW_ON_ERROR);
         }
 
-        //$result = JwtService::checkToken();
-        // if ($result["code"] === 1) {
-        //    return json_encode($result, JSON_THROW_ON_ERROR);
-        //}
-
-
-        if ($page < 1 || $limit < 1) {
+        if ($page < 1 || $limit < 1 || $limit > 100) {
             header("HTTP/1.1 404 Not Found");
             return json_encode("Erreur de paramètres", JSON_THROW_ON_ERROR);
         }
@@ -54,7 +48,7 @@ class ApiController
      * @throws RandomException
      * @throws Exception
      */
-    public function nursery()
+    public function nursery(): bool|string
     {
         $this->checkToken();
         $json = file_get_contents('php://input');
@@ -128,14 +122,14 @@ class ApiController
     {
         if (!isset($_SERVER["HTTP_AUTHORIZATION"])) {
             header("HTTP/1.1 401 Unauthorized");
-            return ["code" => 1, "message" => "Token manquant"];
+            return ["code" => '401', "message" => "Token manquant"];
         }
 
         $token = $_SERVER["HTTP_AUTHORIZATION"];
         $result = JwtService::checkToken();
         if ($result["code"] === 1) {
             header("HTTP/1.1 401 Unauthorized");
-            return ["code" => 1, "message" => "Token invalide"];
+            return ["code" => '401', "message" => "Token invalide"];
         }
         return ["code" => 0, "message" => "Token valide"];
     }
@@ -190,7 +184,11 @@ class ApiController
      */
     private function delete(String $json) : bool {
         $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-        Nursery::SqlDelete($data["id"]);
+        $response = Nursery::SqlDelete($data["id"]);
+        if($response === false) {
+            header("HTTP/1.1 404 Not Found");
+            return false;
+        }
         return true;
     }
 

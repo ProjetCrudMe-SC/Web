@@ -17,26 +17,30 @@ class UserController extends AbstractController
      */
     public function create(): string
     {
-        if (isset($_POST["nomprenom"]) && isset($_POST["mail"]) && isset($_POST["password"]) && isset($_POST["roles"])) {
+        if (isset($_POST["nomprenom"], $_POST["mail"], $_POST["password"], $_POST["roles"])) {
             $user = new User();
             $hashpass = password_hash($_POST["password"], PASSWORD_BCRYPT, ["cost" => 12]);
             $user->setNomPrenom($_POST["nomprenom"])
                 ->setMail($_POST["mail"])
                 ->setPassword($hashpass)
                 ->setRoles($_POST["roles"]);
-            $result = User::SqlAdd($user);
+            User::SqlAdd($user);
 
             header("location:/");
         }
         return $this->getTwig()->render("User/create.html.twig");
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function login()
     {
-        if (isset($_POST["mail"]) && isset($_POST["password"])) {
+        if (isset($_POST["mail"], $_POST["password"])) {
             $user = User::SqlGetByMail($_POST["mail"]);
             if ($user != null) {
-                //Comparaison des mots de passe
                 if (password_verify($_POST["password"], $user->getPassword())) {
                     $_SESSION["login"] = [
                         "mail" => $user->getMail(),
@@ -45,10 +49,10 @@ class UserController extends AbstractController
                     ];
                     header("location:/Nursery/all");
                 } else {
-                    throw new \Exception("Erreur User/Password");
+                    throw new Exception("Erreur User/Password");
                 }
             } else {
-                throw new \Exception("Aucun user avec ce mail");
+                throw new Exception("Aucun user avec ce mail");
             }
         } else {
             return $this->getTwig()->render("User/login.html.twig");
@@ -58,11 +62,10 @@ class UserController extends AbstractController
 
     public static function protect(array $rolescompatibles)
     {
-        if (!isset($_SESSION["login"]) || !isset($_SESSION["login"]["roles"])) {
+        if (!isset($_SESSION["login"]["roles"])) {
             throw new \Exception("Vous devez vous authentifier pour acceder à cette page");
         }
 
-        //Comparaison Role par Role
         $rolefound = false;
         foreach ($_SESSION["login"]["roles"] as $role) {
             if (in_array($role, $rolescompatibles)) {
@@ -84,27 +87,30 @@ class UserController extends AbstractController
         header("location:/");
     }
 
+    /**
+     * @throws \JsonException
+     */
     public function loginJwt()
     {
         header('Content-Type: application/json; charset=utf-8');
 
-        if ($_SERVER["REQUEST_METHOD"] != "POST") {
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             header("HTTP/1.1 404 Not Found");
             return json_encode("Erreur de méthode (POST attendu)");
         }
 
-        if (!isset($_POST["mail"]) || !isset($_POST["password"])) {
+        if (!isset($_POST["mail"], $_POST["password"])) {
             header("HTTP/1.1 404 Not Found");
-            return json_encode("Erreur il manque des données)");
+            return json_encode("Erreur il manque des données)", JSON_THROW_ON_ERROR);
         }
 
         $user = User::SqlGetByMail($_POST["mail"]);
-        if ($user == null) {
-            return json_encode("Erreur user inconu");
+        if ($user === null) {
+            return json_encode("Erreur user inconu", JSON_THROW_ON_ERROR);
         }
 
         if (!password_verify($_POST["password"], $user->getPassword())) {
-            return json_encode("Erreur User / Password");
+            return json_encode("Erreur User / Password", JSON_THROW_ON_ERROR);
         }
 
         echo JwtService::createToken([

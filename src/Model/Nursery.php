@@ -226,10 +226,10 @@ class Nursery implements JsonSerializable
             ORDER BY name DESC LIMIT :nb');
         $requete->bindValue('nb', $nb, PDO::PARAM_INT);
         $requete->execute();
-        $nurserySQL = $requete->fetchAll(PDO::FETCH_ASSOC);
+        $nurseriesSQL = $requete->fetchAll(PDO::FETCH_ASSOC);
         $nurseryObjet = [];
-        foreach ($nurserySQL as $nurserySQL) {
-            $nursery = new Nursery();
+        foreach ($nurseriesSQL as $nurserySQL) {
+            $nursery = new self();
             $date = new DateTime($nurserySQL["DatePublication"]);
             $nursery->setNameNursery($nurserySQL["Name"])
                 ->setId($nurserySQL["Id"])
@@ -265,9 +265,9 @@ class Nursery implements JsonSerializable
         LEFT JOIN Coordinates ON Nurseries.CoordinatesId = Coordinates.Id
         LEFT JOIN Contacts ON Nurseries.ContactId = Contacts.Id;');
         $requete->execute();
-        $nurserySQL = $requete->fetchAll(PDO::FETCH_ASSOC);
+        $nurserysSQL = $requete->fetchAll(PDO::FETCH_ASSOC);
         $nurserysObjet = [];
-        foreach ($nurserySQL as $nurserySQL) {
+        foreach ($nurserysSQL as $nurserySQL) {
             $nursery = new Nursery();
             $date = new DateTime($nurserySQL["DatePublication"]);
             $nursery
@@ -345,13 +345,21 @@ class Nursery implements JsonSerializable
         }
     }
 
-    public static function SqlDelete(string $id): void
+    public static function SqlDelete(string $id): bool
     {
         $bdd = BDD::getInstance();
+        $req = $bdd->prepare("SELECT * FROM Nurseries WHERE Id=:Id");
+        $req->execute([
+            'Id' => $id
+        ]);
+        if($req->fetch()){
+            return false;
+        }
         $req = $bdd->prepare("DELETE FROM Nurseries WHERE Id=:Id");
         $req->execute([
             'Id' => $id
         ]);
+        return true;
     }
 
     /**
@@ -454,7 +462,7 @@ class Nursery implements JsonSerializable
             $town = $this->getTown();
             $imageFileName = $this->getImageFileName();
             $imageRepository = $this->getImageRepository();
-            $format = $this->getDatePublication()->format("Y-m-d");
+            $format = $this->getDatePublication()?->format("Y-m-d");
 
             $requete->bindParam(':Id', $id);
             $requete->bindParam(':Name', $nameNursery);

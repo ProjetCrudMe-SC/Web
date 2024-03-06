@@ -7,24 +7,29 @@
     <form method="post">
 
         <div class="mb-3">
-            <input type="text" class="form-control" placeholder="Votre nom et prenom" name="nomprenom">
+            <label>
+                <input type="text" class="form-control" placeholder="Votre nom et prenom" name="nomprenom">
+            </label>
         </div>
 
         <div class="mb-3">
-            <input type="email" class="form-control" placeholder="Votre mail" name="mail">
+            <label>
+                <input type="email" class="form-control" placeholder="Votre mail" name="mail">
+            </label>
         </div>
 
         <div class="mb-3">
-            <input type="password" class="form-control" placeholder="mot de passe" name="password">
+            <label>
+                <input type="password" class="form-control" placeholder="mot de passe" name="password">
+            </label>
         </div>
-        {# à terme il faudrait tester la complexité du mot de passe et un autre champ pour confirmer le mot de passe #}
 
         <div class="mb-3">
-            <select class="form-select" name="roles[]" multiple>
-                <option value="Administrateur">Administrateur</option>
-                <option value="Redacteur">Redacteur</option>
-                <option value="Verificateur">Vérificateur</option>
-            </select>
+            <label>
+                <select class="form-select" name="roles[]" multiple>
+                    <option value="Administrateur">Administrateur</option>
+                </select>
+            </label>
         </div>
 
         <button type="submit" class="btn btn-primary">Valider</button>

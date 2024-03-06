@@ -1,23 +1,23 @@
-<h1>{{ nursery.NameNursery }}</h1>
+<h1>{{ Nursery.NameNursery }}</h1>
 <div>
-    <p>Description : {{ nursery.Description }}</p>
-    <p>Date : {{ nursery.datePublication|date("d/m/Y") }}</p>
+    <p>Description : {{ Nursery.Description }}</p>
+    <p>Date : {{ Nursery.datePublication|date("d/m/Y") }}</p>
 </div>
 <div>
     <h2>Contact</h2>
-    <p>Prénom : {{ nursery.Contact.firstname }}</p>
-    <p>Nom : {{ nursery.Contact.lastname }}</p>
-    <p>Téléphone : {{ nursery.Contact.phone }}</p>
-    <p>Email : {{ nursery.Contact.mail }}</p>
+    <p>Prénom : {{ Nursery.Contact.firstname }}</p>
+    <p>Nom : {{ Nursery.Contact.lastname }}</p>
+    <p>Téléphone : {{ Nursery.Contact.phone }}</p>
+    <p>Email : {{ Nursery.Contact.mail }}</p>
 </div>
 <div>
     <h2>Lieu</h2>
-    <p>Ville : {{ nursery.Town }}</p>
-    <p>Latitude : {{ nursery.Coordinates.Latitude }}</p>
-    <p>Lontitude : {{ nursery.coordinates.Longitutde }}</p>
+    <p>Ville : {{ Nursery.Town }}</p>
+    <p>Latitude : {{ Nursery.Coordinates.Latitude }}</p>
+    <p>Longitude : {{ Nursery.coordinates.Longitude }}</p>
 </div>
 <p>
-    {% if file_exist( './uploads/images/'~nursery.ImageRepository~'/'~nursery.ImageFileName ) and nursery.ImageFileName !="" %}
-        <img src="/uploads/images/{{ nursery.ImageRepository }}/{{ nursery.ImageFileName }}" class="img-thumbnail" alt="Image"/>
+    {% if file_exist( './uploads/images/'~Nursery.ImageRepository~'/'~Nursery.ImageFileName ) and Nursery.ImageFileName !="" %}
+        <img src="/uploads/images/{{ Nursery.ImageRepository }}/{{ Nursery.ImageFileName }}" class="img-thumbnail" alt="Image"/>
     {% endif %}
 </p>

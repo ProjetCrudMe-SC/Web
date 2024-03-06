@@ -66,11 +66,9 @@ class NurseryController extends AbstractController
      */
     public function delete(): void
     {
-        UserController::protect(["Redacteur", "Administrateur", "Editeur"]);
-        if (isset($_POST["id"])) {
-            if ($_SESSION["token"] == $_POST["tokenCSRF"]) {
-                Nursery::SqlDelete($_POST["id"]);
-            }
+        UserController::protect(["Administrateur"]);
+        if (isset($_POST["id"]) && $_SESSION["token"] === $_POST["tokenCSRF"]) {
+            Nursery::SqlDelete($_POST["id"]);
         }
         header("Location: /Nursery/all");
     }
@@ -84,7 +82,7 @@ class NurseryController extends AbstractController
     public function add(): string
     {
         UserController::protect(["Redacteur", "Administrateur", "Editeur"]);
-        if (isset($_POST["Name"]) && isset($_POST["Description"])) {
+        if (isset($_POST["Name"], $_POST["Description"])) {
             $sqlRepository = null;
             $nomImage = null;
 
