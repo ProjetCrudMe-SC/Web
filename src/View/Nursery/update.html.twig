@@ -97,7 +97,7 @@
         <div class="mb-3">
             <input type="file" class="custom-file-input" name="Image">
         </div>
-        {% if file_exist( './uploads/images/'~nursery.ImageRepository~'/'~nursery.ImageFileName ) and nursery.ImageFileName !="" %}
+        {% if file_exist( './uploads/images/'~nursery.ImageRepository~'/'~nursery.ImageFileName ) and nursery.ImageFileName != "" %}
             <div class="mb-3">
                 <img src="/uploads/images/{{ nursery.ImageRepository }}/{{ nursery.ImageFileName }}"
                      class="img-thumbnail" alt="Image"/>

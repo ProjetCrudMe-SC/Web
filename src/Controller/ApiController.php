@@ -220,7 +220,6 @@ class ApiController
 
     /**
      * @throws RandomException
-     * @throws JsonException
      * @throws Exception
      */
     private function add(String $json) {

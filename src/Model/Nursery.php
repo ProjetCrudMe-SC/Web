@@ -121,13 +121,6 @@ class Nursery implements JsonSerializable
         return $this;
     }
 
-    public function premiersMots(int $n): string
-    {
-        preg_match('/^(\S+\s+){0,' . ($n - 1) . '}\S+/', $this->Description, $matches);
-        $resultat = $matches[0];
-        return $resultat;
-    }
-
     public function strlen()
     {
         return \strlen($this->NameNursery) + 1;
@@ -247,7 +240,7 @@ class Nursery implements JsonSerializable
     public static function SqlGetAll(): array
     {
         $bdd = BDD::getInstance();
-        $requete = $bdd->prepare('SELECT
+        $requete = $bdd->query('SELECT
         Nurseries.Id AS NurseryId,
         Nurseries.Name,
         Nurseries.Description,
@@ -264,7 +257,6 @@ class Nursery implements JsonSerializable
         FROM Nurseries
         LEFT JOIN Coordinates ON Nurseries.CoordinatesId = Coordinates.Id
         LEFT JOIN Contacts ON Nurseries.ContactId = Contacts.Id;');
-        $requete->execute();
         $nurserysSQL = $requete->fetchAll(PDO::FETCH_ASSOC);
         $nurserysObjet = [];
         foreach ($nurserysSQL as $nurserySQL) {
@@ -293,14 +285,14 @@ class Nursery implements JsonSerializable
 
 
         $arrayTown = array('Mont-Saint-Aignan', 'Rouen', 'Le Havre', 'Paris');
-        $arrayTitre = array('Crescendo', 'Lumière d\'Étoiles Crèche', 'Douce Harmonie Maternelle', 'Sourires Radieux Nurserie');
-        $arrayEmail = array('crescendo@creche.fr', 'lec@creche.fr', 'douce-harmonie@creche.fr', 'sourires@creches.fr');
-        $arrayFirstName = array('Jean', 'Pierre', 'Paul', 'Jacques');
-        $arrayLastName = array('Dupont', 'Durand', 'Martin', 'Lefebvre');
+        $arrayTitre = array('Crescendo', 'Lumière d\'Étoiles Crèche', 'Douce Harmonie Maternelle', 'Sourires Radieux Nurserie', 'Petits Trésors', 'Éclat de Rire', 'Charmante Enfance', 'Joyeux Bambins');
+        $arrayEmail = array('crescendo@creche.fr', 'lec@creche.fr', 'douce-harmonie@creche.fr', 'sourires@creches.fr', 'petits.tresors@creche.fr', 'eclat.de.rire@creche.fr', 'charmante.enfance@creche.fr', 'joyeux.bambins@creche.fr');
+        $arrayFirstName = array('Jean', 'Pierre', 'Paul', 'Jacques', 'Marie', 'Sophie', 'Lucie', 'Thomas');
+        $arrayLastName = array('Dupont', 'Durand', 'Martin', 'Lefebvre', 'Lefevre', 'Dubois', 'Roux', 'Leroux');
 
 
         $dateajout = new DateTime();
-        for ($i = 1; $i <= 200; $i++) {
+        for ($i = 1; $i <= 40; $i++) {
             shuffle($arrayTown);
             shuffle($arrayTitre);
             shuffle($arrayEmail);
@@ -330,10 +322,10 @@ class Nursery implements JsonSerializable
                 ->setCoordinates($coordinates)
                 ->setContact($contact)
                 ->setNameNursery($arrayTitre[0])
-                ->setDescription('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla euismod, nisl nec aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl')
+                ->setDescription('Description de la crèche')
                 ->setDatePublication($dateajout)
                 ->setTown($arrayTown[0]);
-            Nursery::SqlAdd(
+            self::SqlAdd(
                 $nursery->getNameNursery(),
                 $nursery->getDescription(),
                 $nursery->getTown(),
@@ -352,14 +344,24 @@ class Nursery implements JsonSerializable
         $req->bindParam(':Id', $id);
         $req->execute();
         $nurserySql = $req->fetch(PDO::FETCH_ASSOC);
+
         if (!$nurserySql) {
             return false;
         }
+
         $req = $bdd->prepare("DELETE FROM Nurseries WHERE Id=:Id");
         $req->execute([
             'Id' => $id
         ]);
+
+        $contactId = $nurserySql["ContactId"];
+        $req = $bdd->prepare("DELETE FROM Contacts WHERE Id=:ContactId");
+        $req->execute([
+            'ContactId' => $contactId
+        ]);
+
         return true;
+
     }
 
     /**

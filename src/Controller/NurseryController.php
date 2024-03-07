@@ -68,8 +68,7 @@ class NurseryController extends AbstractController
     {
         UserController::protect(["Administrateur"]);
         if (isset($_POST["id"]) && $_SESSION["token"] === $_POST["tokenCSRF"]) {
-            $result = Nursery::SqlDelete($_POST["id"]);
-            var_dump($result);
+            Nursery::SqlDelete($_POST["id"]);
         }
         header("Location: /Nursery/all");
     }
@@ -211,7 +210,7 @@ class NurseryController extends AbstractController
                 if($coordinates === null){
                     error_log("Coordinates est null");
                 }
-                Coordinates::SqlUpdate($_POST["CoordinatesId"], $_POST["Latitude"], $_POST["Longitude"]);
+                Coordinates::SqlUpdate($_POST["CoordinatesId"], (float)$_POST["Latitude"], (float)$_POST["Longitude"]);
 
                 $contact = $nursery->getContact();
                 if($contact === null){
@@ -232,7 +231,6 @@ class NurseryController extends AbstractController
                 if (($result[0] === "1") && $nomImage !== null) {
                     unlink($repository . '/' . $nomImage);
                 }
-                error_log("Valeur de $_POST : " . print_r($_POST, true));
                 header("Location: /Nursery/update/$id");
                 ob_end_flush();
                 exit();

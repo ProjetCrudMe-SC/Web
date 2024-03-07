@@ -2,9 +2,9 @@
 {% block title %} Crèche {{ Nursery.NameNursery }} - {{ parent() }}{% endblock %}
 {% block body %}
     <h1>{{ Nursery.NameNursery }}</h1>
-    <p><strong>Description :</strong>{{ Nursery.Description }}</p>
-    <p><strong>Ville :</strong>{{ Nursery.Ville }}</p>
-    <p><strong>Date :</strong>{{ Nursery.date|date("d/m/Y") }}</p>
+    <p><strong>Description : </strong>{{ Nursery.Description }}</p>
+    <p><strong>Ville : </strong>{{ Nursery.Town }}</p>
+    <p><strong>Date : </strong>{{ Nursery.Date|date("d/m/Y") }}</p>
     <p>
         {% if file_exist( './uploads/images/'~Nursery.ImageRepository~'/'~Nursery.ImageFileName ) and Nursery.ImageFileName !="" %}
             <img src="/uploads/images/{{ Nursery.ImageRepository }}/{{ Nursery.ImageFileName }}" class="img-thumbnail" alt="Image"/>
