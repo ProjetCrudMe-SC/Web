@@ -177,6 +177,7 @@ class NurseryController extends AbstractController
      */
     public function update(string $id)
     {
+        UserController::protect(["Redacteur", "Administrateur", "Editeur"]);
         error_reporting(E_ALL);
         ob_start();
         $nursery = Nursery::SqlGetById($id);

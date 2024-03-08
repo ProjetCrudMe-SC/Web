@@ -24,9 +24,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/Nursery/add">Admin Add</a>
                 </li>
+                {% if session.login is defined %}
                 <li class="nav-item">
                     <a class="nav-link" href="/Nursery/fixtures">Fixtures</a>
                 </li>
+                {% endif %}
             </ul>
         </div>
         <div>
